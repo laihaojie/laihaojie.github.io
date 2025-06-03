@@ -1,0 +1,7191 @@
+---
+url: /src/other/python/2.22.md
+---
+# 2023-02-22
+
+## 打印hello world
+
+```python
+print('hello world')
+```
+
+---
+
+---
+url: /src/other/python/3.1.md
+---
+# 2023-03-01
+
+## 输入
+
+```python
+a = input('输入第一个整数：')
+b = input('输入第二个整数：')
+print('两个整数的和为：', a + b)
+
+print('两个整数的和为：', int(a) + int(b))
+```
+
+---
+
+---
+url: /src/other/python/3.8.md
+---
+# 2023-03-08
+
+## 打印九九乘法表
+
+```python
+for i in range(1, 10):
+    for j in range(1, i + 1):
+        print('{}*{}={}\t'.format(j, i, i * j), end='')
+    print()
+```
+
+## 百钱百鸡
+
+```python
+for x in range(0, 20):
+    for y in range(0, 33):
+        z = 100 - x - y
+        if 5 * x + 3 * y + z / 3 == 100:
+            print('公鸡{}只，母鸡{}只，小鸡{}只'.format(x, y, z))
+```
+
+---
+
+---
+url: /src/other/python/3.15.md
+---
+# 2023-03-15
+
+## 题目
+
+* 字符串的操作
+
+当前存在字符串 'This is a new class in the school'
+要求：
+
+1. 计算字符串的长度，最大值，最小值
+
+2，查找 'is' 在字符串中的位置
+
+3，统计空格出现的次数
+
+## 答案
+
+```python
+test_str = 'This is a new class in the school'
+print('字符串长度：', len(test_str))
+print('字符串最大值：', max(test_str))
+print('字符串最小值：', min(test_str))
+print('字符串中的位置：', test_str.find('is'))
+print('空格出现的次数：', test_str.count(' '))
+```
+
+---
+
+---
+url: /src/other/python/3.22.md
+---
+# 2023-03-22
+
+## 题目
+
+* 注册验证
+
+编写一个注册验证程序，设定如下条件:
+( 1) 用户名必须以下划线 “”开头，长度必须在3~ 3个字符之间
+(2)密码必须由下划线、数字和字母共同组成，不允许有其他符号，长度必须在8 ~ 16个字符之间。
+
+## 答案
+
+```python
+import re
+
+def validate_username(username):
+    # 检查用户名是否以下划线开头并且长度在3-8之间
+    if re.match("^_[a-zA-Z0-9]{3,30}$", username):
+        return True
+    else:
+        return False
+
+def validate_password(password):
+    # 检查密码是否只包含下划线、数字和字母，并且长度在8-16之间
+    if re.match("^[a-zA-Z0-9_]{8,16}$", password):
+        return True
+    else:
+        return False
+
+# 示例用户名和密码
+username = "_acd"
+password = "12345_abcd"
+
+# 验证用户名和密码是否符合条件
+if validate_username(username) and validate_password(password):
+    print("注册成功")
+else:
+    print("用户名或密码不符合要求")
+```
+
+---
+
+---
+url: /src/utils/a.md
+---
+# A
+
+---
+
+---
+url: /src/framework/android/adb.md
+---
+# ADB
+
+[命令文章](https://blog.csdn.net/Next_Second/article/details/73648754)
+
+## 常用命令
+
+```bash
+# 列出所有设备
+adb devices
+# 安装APK
+adb install xxx.apk
+# 覆盖安装(保留缓存和数据)
+adb install -r xxx.apk
+# 卸载APK
+adb uninstall package
+# 卸载时保留数据和缓存目录
+adb uninstall -k package
+
+# 查看设备所有应用包名
+adb shell pm list packages
+# 列出指定包名对应的apk路径
+adb shell pm path your.package.name
+# 列出指定包名对应的apk路径
+adb shell pm path your.package.name
+# 清空指定包名对应的应用的数据和缓存文件
+adb shell pm clear your.package.name
+
+# 列出进程列表及其pid
+adb shell ps
+# 杀死指定pid的进程
+adb shell kill pid
+# 查看指定进程信息
+adb shell ps -x pid
+
+# 正常重启
+adb reboot
+
+# 将电脑文件复制到设备sd卡上
+adb push 电脑文件路径 /sdcard
+# 设备文件复制到电脑上
+adb pull /sdcard/text.txt 电脑文件路径
+
+# 删除
+adb shell rm /sdcard/text.txt
+# -f 强制删除文件不需要确认
+# -r 递归删除文件夹内文件
+# -i 删除文件前需要确认
+```
+
+## 连接手机
+
+```bash
+# 手机连接USB数据线 打开USB调试 在同一局域网下可以使用无线连接
+# cmd环境执行
+# 配置adb服务的端口号为 5555 会自动重启设备端的adb服务
+adb tcpip 5555
+
+# 连接手机 手机ip地址:5555   （手机的IP地址可以在设置里面看到）
+adb connect 192.168.1.136:5555
+```
+
+---
+
+---
+url: /src/framework/android/apk.md
+---
+# APK分包
+
+```java
+android {
+  ...
+  splits {
+
+    // 基于不同的abi架构配置不同的apk
+    abi {
+
+      // 必须为true，打包才会为不同的abi生成不同的apk
+      enable true
+
+      // 默认情况下，包含了所有的ABI。
+      // 所以使用reset()清空所有的ABI，再使用include指定我们想要生成的架构armeabi-v7a、arm-v8a
+      reset()
+
+      // 逗号分隔列表的形式指定 Gradle 应针对哪些 ABI 生成 APK。只与 reset() 结合使用，以指定确切的 ABI 列表。
+      include "armeabi-v7a", "arm64-v8a"
+
+      // 是否生成通用的apk，也就是包含所有ABI的apk。如果设为 true，那么除了按 ABI 生成的 APK 之外，Gradle 还会生成一个通用 APK。
+      universalApk true
+    }
+  }
+
+  buildTypes {
+      debug {
+          signingConfig signingConfigs.debug
+      }
+
+      release {
+          // TODO: Add your own signing config for the release build.
+          // Signing with the debug keys for now, so `flutter run --release` works.
+          signingConfig signingConfigs.release
+
+      }
+
+      // 为不同的abi架构配置不同的签名
+      applicationVariants.all { variant ->
+          variant.outputs.all { output ->
+
+              String abi = ""
+              if (output.getFilters() != null && output.getFilters().size() > 0) {
+                  abi = output.getFilters().get(0).getIdentifier()
+              }
+              println abi
+              if(abi == "armeabi-v7a") {
+                  output.outputFileName = "app-armeabi-v7a.apk"
+              } else if(abi == "arm64-v8a") {
+                  output.outputFileName = "jieapp.apk"
+              }
+          }
+
+      }
+
+    }
+}
+```
+
+---
+
+---
+url: /src/utils/b.md
+---
+# B
+
+---
+
+---
+url: /src/engineering/bumpp.md
+---
+# Bumpp
+
+## 安装
+
+::: code-group
+
+```bash [pnpm]
+pnpm add bumpp -D
+```
+
+```bash [yarn]
+yarn add bumpp -D
+```
+
+```bash [npm]
+npm install bumpp -D
+```
+
+:::
+
+## 使用
+
+```bash
+bumpp --commit --push --all --tag
+```
+
+## 只升级版本
+
+```bash
+bumpp patch -y --no-verify --no-tag --no-commit --no-push
+```
+
+---
+
+---
+url: /src/develop/centos.md
+---
+# Centos7
+
+## 命令
+
+```bash
+# 查看命令所在位置
+which xxx
+```
+
+## 安装nginx
+
+```bash
+# 安装nginx
+yum install nginx
+# 启动nginx
+systemctl start nginx
+# 重启nginx
+systemctl restart nginx
+# 停止nginx
+systemctl stop nginx
+
+## 配置文件路径
+# /etc/nginx/nginx.conf
+
+# 关闭阿里云安装Centos后欢迎页
+lsof -i:80
+sudo fuser -k 80/tcp
+```
+
+## 安装Mysql
+
+```bash
+yum install mysql
+yum install mysql-devel
+
+wget http://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
+rpm -ivh mysql80-community-release-el7-5.noarch.rpm
+yum install mysql-community-server
+
+systemctl restart mysqld
+
+## 配置文件路径
+# /etc/my.cnf
+
+## 修改密码
+
+# 1，先在配置文件里加上 skip-grant-tables 重启mysql后免密登陆进入mysql
+# 2，查看当前认证方式以及用户，默认是 caching_sha2_password 认证，
+select host, user, authentication_string, plugin from user;
+
+# 3，如果2是默认认证方式，则修改为密码认证为 mysql_native_password先， 在配置文件末尾加上 default_authentication_plugin=mysql_native_password
+# 后再次重启mysqld，免密登陆
+
+# 4，不能直接修改密码，会报错。要先清空root密码：
+update user set authentication_string='' where user='root';
+
+flush privileges;
+
+# 5，退出mysql,
+# 删除/etc/my.cnf文件里的 skip-grant-tables ，再一次重启 mysql 服务，再次登陆的时候是空密码登陆：
+
+mysql -u root -p
+
+## 修改密码策略 只验证长度
+set global validate_password.policy=LOW;
+
+## 设置密码
+alter user 'root'@'localhost' identified by 'youpassword';
+
+## 设置允许远程访问
+use mysql
+update user set host='%' where user ='root';
+flush privileges;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'WITH GRANT OPTION;
+```
+
+---
+
+---
+url: /src/develop/vim/chrome.md
+---
+# Chrome
+
+## Vimium C
+
+## 页面内的操作
+
+## 搜索&查找
+
+## 标签
+
+## 标记
+
+## devTools
+
+## debug
+
+---
+
+---
+url: /src/notes/chrome_extension.md
+---
+# Chrome插件
+
+## background、content、popup的通信
+
+[文章地址](https://juejin.cn/post/6844903985711677453)
+
+---
+
+---
+url: /src/framework/android/cpu.md
+---
+# CPU架构
+
+## armeabi-v7a
+
+* 此 ABI 适用于基于 32 位 ARM 的 CPU，2016年之前大部分Android手机的cpu都是此架构。
+
+## arm64-v8a
+
+* 此 ABI 适用于基于 ARMv8-A 的 CPU，支持 64 位 AArch64 架构，一般从2016年开始，主流Android手机的cpu架构都是arm64的。
+
+## x86
+
+* 此ABI支持X86架构，像Intel、AMD的cpu都是基于此架构。
+  在2012-2016这段时间，为了赶上移动互联网的浪潮，Intel和Nvidia专门为Android手机和平板推出过X86架构的CPU，可惜都失败了。现在一般不需要适配此架构，除非APK需要安装在Intel平板上。
+
+## x86\_64
+
+* 此ABI支持x86-64位架构的CPU。同上
+
+::: tip
+对于mips、mips64、armeabi这些架构来说，Android从Android Plugin for Gradle 3.1.0（对应gradle 4.4）后不再支持，因为从NDK r17开始，不再将这些 ABI 作为支持的目标。
+:::
+
+---
+
+---
+url: /src/notes/part/css.md
+---
+# CSS
+
+## css
+
+```css
+/* 文本溢出... */
+white-space:nowrap;
+text-overflow:ellipsis;
+overflow:hidden;
+
+/* 多行文本溢出 */
+display:-webkit-box;
+-webkit-box-orient:vertical;
+-webkit-line-clamp:2;
+overflow:hidden;
+
+/* 下滑线 */
+text-decoration:underline;
+/* 中横线 */
+text-decoration:line-through;
+
+/* pre标签文字换行 */
+
+pre {
+    white-space: pre-wrap; /* css-3 */
+    word-wrap: break-word; /* InternetExplorer5.5+ */
+    white-space: -moz-pre-wrap; /* Mozilla,since1999 */
+    white-space: -pre-wrap; /* Opera4-6 */
+    white-space: -o-pre-wrap; /* Opera7 */
+}
+/* 删除默认样式 */
+button {
+   all: unset;
+}
+
+/* css渐变 */
+#grad {
+    /* 从上到下 */
+    background-image: linear-gradient(red, yellow);
+    /* 从左到右 */
+    background-image: linear-gradient(to right, red , yellow);
+}
+
+/* 隐藏滚动条 */
+.wrapper::-webkit-scrollbar { /* 整个滚动条 */
+    width: 0; /* 纵向滚动条的宽度  */
+    background: rgba(213,215,220,0.3);
+    border: none;
+    height: 10px;
+}
+.wrapper::-webkit-scrollbar-track { /* 滚动条轨道  */
+    border: none;
+}
+/* 横向滚动条宽度  */
+.wrapper::-webkit-scrollbar-thumb { /* 滚动条里面的小方块  */
+    border-radius: 10px;
+    background: #ccc;
+}
+```
+
+## 灰色滤镜
+
+```css
+html.gray {
+    filter: grayscale(85%) saturate(80%);
+    -webkit-filter: grayscale(85%) saturate(80%);
+    -moz-filter: grayscale(85%) saturate(80%);
+    -ms-filter: grayscale(85%) saturate(80%);
+    -o-filter: grayscale(85%) saturate(80%);
+    filter: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='grayscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0'/></filter></svg>#grayscale");
+    filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=.85);
+    -webkit-filter: grayscale(.85) saturate(.8);
+}
+```
+
+## 图片变白
+
+```css
+/* 图片变成白色 */
+filter: brightness(100);
+
+/* 图片变成黑色 */
+filter: brightness(0);
+```
+
+## 引入字体图标
+
+```css
+/* 导入 */
+@font-face {
+  font-family: 'font-name';
+  src: url('/font.ttf'), url('/font.woff') format('truetype'),
+}
+/* 使用 */
+.text{
+  font-family: 'font-name';
+}
+```
+
+## 选择器
+
+```css
+/* 设置前3个元素的margin-top值与其他的不同 */
+:nth-child(-n+3){
+     margin-top: 12px;
+ }
+
+/*【负方向范围】选择第1个到第6个 */
+:nth-child(-n+6){}
+
+/*【正方向范围】选择从第6个开始的 */
+:nth-child(n+6){}
+
+/*【限制范围】选择第6个到第9个，取两者的交集【感谢小伙伴的纠正~】 */
+:nth-child(-n+9):nth-child(n+6){}
+```
+
+---
+
+---
+url: /src/develop.md
+---
+# Develop
+
+---
+
+---
+url: /src/develop/docker/desktop.md
+---
+# Docker-Desktop
+
+## windows进入docker子系统
+
+```sh
+# 进入docker子系统
+wsl -d docker-desktop
+
+# 退出docker子系统
+exit
+```
+
+## Bug记录
+
+```sh
+## windows docker 安装 ES vm.max_map_count [65530]
+# 进入docker子系统
+wsl -d docker-desktop
+# 修改配置
+sysctl -w vm.max_map_count=262144
+# 退出
+exit
+```
+
+---
+
+---
+url: /src/develop/docker/docker_file.md
+---
+# DockerFile
+
+## 保留字指令
+
+* `FROM`：指定基础镜像
+* `MAINTAINER`：指定镜像创建者
+* `RUN`：执行命令
+* `WORKDIR`：指定工作目录
+* `USER`：指定运行容器的用户
+* `ENV`：设置环境变量
+* `ADD`：复制文件 + 解压
+* `COPY`：复制文件
+* `CMD`：指定容器启动时执行的命令
+* `EXPOSE`：指定容器对外暴露的端口
+* `VOLUME`：指定容器对外暴露的目录 容器卷
+* `ENTRYPOINT`：指定容器启动时执行的命令
+
+---
+
+---
+url: /src/framework/electron.md
+---
+# Electron
+
+[github vue3 + vite 模板](https:www.baidu.com)
+
+* 注意事项
+  使用pnpm管理项目 需要添加.npmrc文件来扁平化node\_modules方便electron-build找寻依赖
+
+---
+
+---
+url: /src/engineering.md
+---
+# Eslint
+
+* 安装 eslint
+
+```sh
+pnpm i eslint @djie/eslint-config -D
+```
+
+[*@djie/eslint-config*](https://github.com/laihaojie/eslint-config)这个包是我个人自己使用的eslint配置文件, 在[@antfu](https://github.com/antfu/eslint-config)的基础上改的
+
+* 新建 eslint.config.js 文件
+
+```js
+// {
+//   "extends": ["@djie"]
+//   // "overrides": [{
+//   //   "files": ["*.nvue"],
+//   //   "extends": ["@djie/eslint-config-vue"]
+//   // }]
+// }
+import jie from '@djie/eslint-config'
+
+export default jie()
+```
+
+* 在package.json中添加配置
+
+```json
+{
+  "scripts": {
+    "lint:fix": "eslint . --fix",
+    "lint": "eslint ."
+  }
+}
+```
+
+* vscode 配置
+
+```json
+{
+  // Enable the ESlint flat config support
+  "eslint.experimental.useFlatConfig": true,
+
+  // Disable the default formatter, use eslint instead
+  "prettier.enable": false,
+  "editor.formatOnSave": false,
+
+  // Auto fix
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "never"
+  },
+
+  // Silent the stylistic rules in you IDE, but still auto fix them
+  "eslint.rules.customizations": [
+    { "rule": "style/*", "severity": "off" },
+    { "rule": "*-indent", "severity": "off" },
+    { "rule": "*-spacing", "severity": "off" },
+    { "rule": "*-spaces", "severity": "off" },
+    { "rule": "*-order", "severity": "off" },
+    { "rule": "*-dangle", "severity": "off" },
+    { "rule": "*-newline", "severity": "off" },
+    { "rule": "*quotes", "severity": "off" },
+    { "rule": "*semi", "severity": "off" }
+  ],
+
+  // Enable eslint for all supported languages
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "html",
+    "markdown",
+    "json",
+    "jsonc",
+    "yaml"
+  ]
+}
+```
+
+## 配置改动
+
+```js
+// 新加的
+rules = {
+  'vue/html-indent': 'off',
+  'vue/html-closing-bracket-newline': 'off',
+  'vue/html-self-closing': 'off',
+  'vue/first-attribute-linebreak': 'off',
+  'vue/singleline-html-element-content-newline': 'off'
+}
+
+// 修改的
+rules = {
+
+}
+```
+
+---
+
+---
+url: /src/framework.md
+---
+# Framework
+
+---
+
+---
+url: /src/develop/git/hooks.md
+---
+# Git Hooks
+
+## 设置hooks目录
+
+```bash
+# 设置当前项目的hooks目录
+git config core.hooksPath <新的目录>
+git config core.hooksPath .githooks
+
+# 设置全局的hooks目录
+git config --global core.hooksPath ~/.githooks
+```
+
+---
+
+---
+url: /src/notes/part/html.md
+---
+# HTML
+
+## H5限制用户缩放
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+```
+
+## 禁止HTML缓存
+
+```html
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+```
+
+---
+
+---
+url: /src/develop/vim/iterm2.md
+---
+# iTerm2
+
+## 导航
+
+---
+
+---
+url: /src/notes/JavaScript.md
+---
+# JavaScript
+
+## 第一章 什么是JavaScript
+
+### 1.1 JavaScript历史
+
+```txt
+JavaScript诞生于1995年 原名叫(LiveScript)
+1997年,JavaScript 1.1作为提案被提交给欧洲计算机制造商协会(Ecma) . 第39技术委员会(TC39).承担了"标准化一门通用,跨平台,厂商中立的脚本语言的语法和语义"的任务.
+```
+
+### 1.2 JavaScript的实现
+
+```txt
+JavaScript是由 ECMAScript + DOM + BOM 组成
+
+核心(ECMAScript) + 文档对象模型(DOM) + 浏览器对象模型(BOM)
+DOM document
+BOM window location navigator screen history
+```
+
+## 第二章 HTML中的JavaScript
+
+### 2.1 \<script>元素
+
+```txt
+scr属性: 设置外部文件的url地址或本地文件地址
+defer属性: 可是使得js代码等到文档完全解析完成在解析当前js文件
+async属性: 异步加载js文件 但不能保证js文件加载顺序
+```
+
+### 2.2 行内代码
+
+```txt
+虽然可以直接在HTML文件中嵌入JavaScript代码 但通常认为尽可能把代码放入外部文件当中, 优势主要有 可维护性高 浏览器可缓存 适应未来
+```
+
+### 2.3 文档模式
+
+```txt
+分为混杂模式和标准模式 主要区别在于如何对待图片元素周围的空白(在表格中使用图片最明显)
+```
+
+### 2.4 \<noscript>元素
+
+```txt
+noscript 只有浏览器不支持脚本 或者 浏览器对脚本的支持关闭 才会显示其中的内容否则不会显示
+```
+
+## 第三章 语言基础
+
+### 3.1语法
+
+```txt
+一切都区分大小写 无论是变量,函数名,操作符都区分大小写
+标识符: 第一个字必须是 字母, 下划线, 美元符, 或者数字
+注释: 单行注释 // 或者 多行注释 /* */
+严格模式: 在文件首行添加字符串 "use strict"
+```
+
+### 3.2 关键字与保留字
+
+```txt
+关键字: break do in typeof case else instanceof var class extends return while const finally super with continue for switch yield debugger function this default if throw delete import try
+保留字:始终保留: enum 严格模式下保留: implements package public interface protected static let private 模板代码中保留: await
+```
+
+### 3.3 变量
+
+```txt
+变量声明:
+ var 函数的局部作用于 可以重复定义 存在变量提升问题
+ let 代码块作用域  重复定义会报错 不存在变量提升问题
+    const 代码块作用域 顶层不可修改 修改会报错 不存在变量提升    问题
+```
+
+### 3.4 数据类型
+
+```txt
+typeof 数据类型判断
+Undefined 类型
+Number 类型
+String 类型
+Object 类型
+Boolean 类型
+Null 类型
+Symbol 类型
+```
+
+### 3.5 操作符
+
+```txt
+非数字类型会使用Number()进行转换 操作符遇到对象视情况而定使用对象的valueOf()或toString()
+
+一元操作符: 单个变量进行运算操作  (+)(-)
+位操作符: 二进制数转十进制 ((2**当前位数) * 当前值) + .....
+布尔操作符: 逻辑非(!) 取反, 逻辑与(&&) 看前面一个值是否是对象或为true 返回后一个值,否则与之相反  逻辑或(||)  看前面一个是否是对象或者为true 返回前面一个,否则与之相反
+乘性操作符:  (*) (/)
+指数操作符:  (**)
+加性操作符: 两个变量进行运算操作 (+) (-)
+关系操作符:(>) (<) (<=) (>=)  返回值为布尔值
+相等操作符: (==) (!=) 会进行类型转换比较 (===) (!==)进行类型比较 类型相等进行判等比较
+条件操作符: 就是三元运算符  boolean类型 ? 变量A : 变量B
+赋值操作符:(*=) (+=) (-=) (%=) (/=) (<<=) (>>=) (>>>=)
+逗号操作符: 可以进行分隔操作 但是在赋值操作中 去最后一个逗号后面的
+```
+
+### 3.6 语句
+
+```txt
+if 语句
+do-while 语句
+while 语句
+for for-in for-of 语句
+标签语句
+break 和 continue 语句
+with 语句
+switch 语句
+函数
+
+标签语句:
+start: for (let i = 0;i < count; i ++){
+ console.log(i) // 这里的start就是标签
+ 可以使用 break start 退出到指定位置
+}
+
+```
+
+## 第五章 基本引用类型
+
+### 5.1 Date
+
+```javascript
+const date = new Date()
+获取时间毫秒数: date.getTime()
+获取年份: date.getFullyear()
+获取月份: date.getMonth() + 1
+获取日: date.getDate()
+获取星期几: date.getDay()
+获取小时: date.getHours()
+获取分钟: date.getMinutes()
+获取秒: date.getSeconds()
+获取毫秒: date.getMilliseconds()
+```
+
+### 5.2 RegExp
+
+```javascript
+const reg = new RegExp()
+```
+
+### 5.3 原始值包装类型
+
+```javascript
+// Boolean Number String
+const bool = new Boolean()
+const num = new Number()
+toFixed(2) // 返回包含指定小数点位数值字符串
+isInteger() // 判断是个数值是否为整数
+const str = new String()
+字符串的操作方法:
+concat(...str) // 用于将一个或者多个字符串拼接成一个新的字符串
+slice()
+substr() // 方法 字符串截取
+indexOf(str) // 返回字符在字符串中的位置没有找到返回-1
+includes(str) // 判断子字符串是否在字符串中 返回布尔值
+trim() // 去除字符串两边的空白
+repeat(3) // 复制3次字符串
+padStart()
+padEnd() // 复制字符串 第一个参数是复制的长度第二个参数 如果长度没有达到默认用第二个参数填补
+toLocaleLowerCase() // 将字符串转为小写
+toLocaleUpperCase() // 将字符串转为大写
+match() // 字符串匹配方法 参数可传正则
+```
+
+### 5.4 单列内置对象
+
+```javascript
+Global对象 // 其实就是平常使用的全局方法比如 isNaN() isFinite() parseInt() ParseFloat()
+URL编码方法
+编码: encodeURIComponent()
+解码: decodeURIComponent()
+eval() // 该方法可以看做一个完整的JavaScript解释器 可以执行js代码 eval("console.log('hello world')")
+// window对象 document对象
+
+Math
+Math.max() // 最大值
+Math.min() // 最小值
+Math.ceil() // 向上取整
+Math.floor() // 向下取整
+Math.round() // 四舍五入
+Math.random() // 返回0-1的随机小数
+// 生成 min-max的随机数:
+function random(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+```
+
+## 第六章 集合引用类型
+
+### 6.1 Object
+
+```txt
+对象创建方式:
+const obj = new Object() 或者字面量 const obj = {}
+
+```
+
+### 6.2 Array
+
+```txt
+数组创建方式:
+const arr = new Array() 或者字面量 const arr = []
+
+Array静态方法: Array.from() Array.of()  创建数组 参数为可迭代对象
+
+数组可以用逗号 ,  占位 未赋值的为undefined
+可以直接修改arr.length 来修改数组长度
+
+Array.isArray() 可以检测是否为数组
+
+迭代器方法: keys() values() entries() 返回的都是迭代器
+
+栈方法: push() 在最后一个位置添加 pop() 删除最后一个元素
+
+队列方法: shift() 删除数组第一个元素并返回 unshift()在第一个位置添加元素
+
+排序方法: reverse() 数组反转 sort((a,b)=>a-b) 可以传一个函数
+
+操作方法: concat() 合并数组 slice() 切割数组
+splice(1,2,3)第一个参数索引 第二个参数删除个数 第三个添加元素
+
+find((value,index,arr)=>value==1) 查找元素 满足条件退出不在继续匹配
+
+迭代方法:
+一下方法都需传入函数
+(value,index,arr)=> boolea
+arr.every() arr.some() 返回布尔类型 判断是否满足条件
+arr.filter() 过滤数组
+arr.forEach() 遍历数组
+arr.map() 根据返回结果构成新数组
+
+```
+
+### 6.4 Map
+
+### 6.6 Set
+
+## 第十章 函数
+
+### 10.1 箭头函数
+
+```txt
+()=>{return }
+只有一个参数可以不写括号
+函数体只有一行可以不不写大括号 默认返回函数体执行结果 没有返回undefined
+
+```
+
+### 10.2 函数名
+
+```txt
+函数名其实是指向函数的指针 函数名==指针 指针 + () 可以调用函数
+指针.name 可以获取函数名的字符串结果
+```
+
+### 10.3 理解参数
+
+```txt
+函数的参数都不是必传的
+也可以不写命名参数
+如果没有写命名参数 可以从函数中 arguments里面获取值
+arguments是一个数组  但不是 Array的实例
+
+箭头函数中没有arguments
+```
+
+### 10.4 没有重载
+
+```txt
+默认没有重载
+如果重新定义函数默认会覆盖之间的定义
+```
+
+### 10.5 默认参数值
+
+```txt
+只需要在定义时括号内写 (name='阿杰')
+如果传了使用传过来的结果 没传使用默认参数
+还可以写成 (name=nikename)
+默认参数可以写变量
+```
+
+### 10.6 参数扩展与收集
+
+```txt
+扩展参数可以使用三个点来解构 ...arr 后面跟着的是一个可迭代对象
+如果还有命名参数 扩展参数必须写在命名参数后面  因为不确定 可迭代对象里面有多少值 可能会发生位置错乱
+```
+
+### 10.7 函数申明与函数表达式
+
+```txt
+如果是用函数声明的方式定义的函数 调用该函数的时候不需要在乎调用位置 因为 函数声明会提升 全部提升到源代码顶部
+```
+
+### 10.8 函数作为值
+
+```txt
+函数也可以作为一个值来给别处使用 比如说常见的闭包
+```
+
+### 10.9 函数内部
+
+```txt
+函数内部存在两个特殊的对象 arguments 和 this
+arguments对象有一个属性callee 该属性指向的是函数的指针
+可以通过该属性来调用当前函数
+
+this 如果在全局中指向的是window
+在箭头函数中指向的是箭头函数的上下文
+
+caller属性可以获取谁调用的它
+```
+
+### 10.10 函数属性与方法
+
+```txt
+每个函数都有两个属性和方法 length prototype
+length 是函数命名参数的个数
+prototype 原型链 tostring() valueof() 都是放在原型链上
+
+call() apply() bind()
+第一个参数都是this上下文 指定当前函数this指向 call apply 都是直接调用函数 区别是第二个参数传入方式不同  bind 是返回一个函数指针后续调用
+```
+
+### 10.11 函数表达式
+
+```txt
+function(){} 匿名函数 兰姆达
+```
+
+### 10.12 递归
+
+```javascript
+// 自己调用自己
+function fib(n) {
+  if (n < 2) {
+    return n
+  }
+  return fib(n - 1) + fib(n - 2)
+}
+```
+
+### 10.13 尾调用优化
+
+```txt
+function waibu(){
+ return neibu()
+}
+```
+
+### 10.14 闭包
+
+```txt
+闭包指的是那些引用了另一个函数作用域中的变量的函数  通常函数嵌套内存函数引用了外层函数的变量就叫做闭包
+
+闭包会占用内存比较多
+
+this
+
+谁调用this指向谁   不确定很模糊指向window
+
+```
+
+### 10.15 立即调用的函数表达式
+
+```txt
+(function(){})();  函数的自调用
+自调用函数会产生一个块级作用域 外部不能访问函数内部
+```
+
+### 10.16 私有变量
+
+```txt
+javascript是没有私有变量的概念的    但是在函数中或者在局部作用域中的参数或者定义的变量  外部是不能访问的 那这些变量对于外部来说可以当做私有变量
+
+外部如果想访问内部变量 内存函数使用外部函数的变量 可以在局部函数中通过闭包的方式返回给外部使用
+
+```
+
+## 第十二章 BOM
+
+### 12.1 window对象
+
+```javascript
+// BOM的核心是window对象 在浏览器中是ECMAScript的Global对象
+// Global作用域中 var定义的变量是挂载到window上面的
+// 获取浏览器视口大小:
+let pageWidth = window.innerWidth
+let pageHeight = window.innerHeight
+if (typeof pageWidth != 'number') {
+  if (document.compatMode === 'CSS1Compat') { // 检查页面是否属于标准模式
+    pageWidht = document.documentElement.clientWidth
+    pageHeight = document.documentElement.clientHeight
+  }
+  else {
+    pageWidth = document.body.clientWidth
+    pageHeight = document.body.clientHeight
+  }
+}
+
+// 导航与打开新窗口:
+window.open()// 第一个参数为目标地址  第二个参数为窗口名称
+
+// 定时器:
+// JavaScript 在浏览器中是单线程执行的
+setTimeout() // 指定一段时间后指定某些带代码
+setInterval() // 指定每隔一段时间执行某些代码
+// 都会返回一个定时ID 可以用 clearTimeout clearInterval 取消定时任务
+// 一般来说尽量是不要使用setInterval 如果不主动取消 只能通过页面卸载清除
+
+// 系统对话框:
+// alert() confirm() prompt()
+// alert 弹出一个警告框
+// confirm 弹出一个选择框
+// prompt 弹出一个输入框
+```
+
+### 12.2 location对象
+
+```txt
+location属性列表:
+hash URL散列值 (#后面的字符串)
+host 服务器名及端口号
+hostname 服务器名
+herf 当前完整的url
+pathname URL中的路径
+port 请求的端口
+protocol 页面使用的协议
+search URL 的查询字符串
+username 域名前指定的用户名
+password 页面前指定的密码
+origin URL的源地址
+```
+
+### 12.3 navigator对象
+
+```txt
+navigator在各个浏览器都有不同 都有自己的属性
+里面的属性和方法都是关于浏览器本身的属性 比如appVersion查看浏览器版本 mediaDevices 返回可用媒体设备 onLine检测是否联网
+```
+
+### 12.4 screen对象
+
+```txt
+screen对象可以获取浏览器窗口显示的信息 比如获取屏幕像素宽高 screen.width screen.height
+```
+
+### 12.5 history对象
+
+```txt
+对于当前窗口 go() 方法 可以返回指定历史页面 负数为后退 正数为前进 如果历史页面不存在不做任何跳转
+后退一页 history.back() 前进一页 history.forward()
+```
+
+## 第十四章 DOM
+
+### 14.1 节点层级
+
+```txt
+document节点表示每个文档的根结点 唯一一个子节点是<html>元素  <html>元素我们称之为文档元素
+
+Node类型:
+所有节点类型都继承自Node类型
+
+节点关系:
+文档中所有节点都与其他节点有关系
+每个节点都有childNodes 属性 该属性返回所有子节点
+
+节点操作:
+appendChild()填在子节点末尾添加  insertBefore()有两个参数第一个参数为更新的节点第二个参数为插入位置的后节点 意思就是新节点会添加在传入的第二个参数节点前面  replaceChild()第一个参数为新节点 第二个参数为要替换的节点
+
+Document类型:
+文档对象 document 是HTMLDocument 的实例 HTMLDocument继承自Document 表示整个HTML页面 document是window对象的实例
+
+浏览器标题 document.title
+
+获取完整的URL document.URL
+
+获取域名 document.domain
+
+获取来源 document.referrer
+
+定位元素:
+getElementById() 传入一个id值 区分大小写
+getElementsByTagName() 传入一个标记名称 返回HTMLCollection 列表 提供一个额外的筛选方法 可以用过属性来筛选 通过namedItem()传入属性值来获取单一节点
+getElementByname() 根据节点的name属性值来筛选 返回节点列表
+
+文档写入:
+document.write()
+
+属性操作:
+getAttribute() 传入属性名称可以获取属性值
+setAttribute() 两个参数 第一个属性名 第二个属性值 如果有该属性则覆盖
+removeAttribute()
+
+创建元素:
+document.createElement() 传入一个参数 标签名  返回一个节点 让后通过appendChild()添加至文档树
+
+```
+
+### 14.2 DOM编程
+
+```txt
+动态脚本:
+let script = document.createElement("script");
+script.src = "index.js";
+document.body.appendChild(script);
+
+动态样式:
+let link = document.createElement('link');
+link.rel = "stylesheet";
+link.type = "text/css";
+link.href = "index.css";
+let head = document.getElementsByTagName("head")[0];
+head.appendCHild(link);
+
+MutationObserv 接口:
+过给构造函数传入一个回调函数 生成观察者对象(Observe)
+let observe = new MutationObserve((mutationRecords)=>{console.log("Hello!")})
+observe.observe(document.body,{attributes:true})
+document.body.className = 'hello' // 打印Hello
+
+上面代码监控了 body的属性变化 如果body属性发生改变可以触发回调函数
+
+```
+
+## 第十五章 DOM扩展
+
+### 15.1 Selectors API
+
+```txt
+querySelector() 方法接收CSS选择符参数 返回DOM树中查询到的第一个节点
+querySelectorAll() 方法接收CSS选择符参数 返回多个结果 NodeList 的静态实例
+matches() 返回布尔值 检测是否可以被querySelector查找
+```
+
+### 15.2 元素遍历
+
+```txt
+```
+
+### 15.3 HTML5
+
+```txt
+css扩展类:
+getElementsByClassName()
+clasList 节点的类名列表 可以通过add remove来操作class
+<div id="app" data-id="123" data-name="好好">hello</div>
+let div = document.getElementById("app")
+div.dataset.id
+div.dataset.name
+自定义属性 data-  通过dataset 取值
+
+innerHtml: 会返回该节点所有后代HTML字符串 如果赋值则更新dom
+outerHTMl: 会返回该节点本身和所有后代HTML字符串 如果赋值则更新dom
+
+children 返回只包含Element 类型的子节点
+contains() 确定节点是否是当前节点的子节点 返回布尔值
+
+```
+
+## 第十六章 DOM2 DOM3
+
+```txt
+let app = document.getElementById("app")
+app.style.cssText = ----
+cssText可以获取元素css 也可以快速设置多个css
+
+offsetHeight 元素在垂直方向占用的尺寸 盒模型高度
+offsetWidth 元素在水平方向占用的像素尺寸 盒模型宽度
+offsetLeft 元素距离左边框的距离
+offsetTop 元素距离上边框的距离
+
+元素尺寸 不算边框
+clientHeight 内容区域高度 不算边框
+clientWidth 内容区域宽度 不算边框
+
+滚动尺寸
+scrollHeight
+scrollLeft
+scrollTop
+scrollWidth
+
+```
+
+## 第十七章 事件
+
+### 17.1 事件流
+
+```txt
+let btn = document.getElementById("app")
+btn.addEventListener("click",()=>{})
+
+事件流包含两个阶段  事件捕获和事件冒泡
+事件捕获是从根节点 document 传递到div 然后事件冒泡是从div 传递到document
+
+阻止事件冒泡的方式
+
+1.event.stopPropagation();
+事件处理过程中，阻止了事件冒泡，但不会阻击默认行为
+
+2.return false;
+事件处理过程中，阻止了事件冒泡，也阻止了默认行为
+
+事件类型:
+用户界面事件 load 加载完成后触发(检测img元素是否加载完成) unload 页面卸载后触发
+键盘事件 keydown 可以通过event.keyCode来判断按下的那个键
+焦点事件 鼠标事件 滚轮事件 输入事件 合成事件
+
+事件委托 利用事件冒泡原理 在最顶层做处理 依次判断事件源从哪个元素发出然后处理响应逻辑
+
+```
+
+## 第二十三章 JSON
+
+### 23.1  语法
+
+```txt
+JSON 语法支持表示三种类型的值
+简单值: 字符串 数值 布尔值 和 null
+对象:对象表示有序键值对 每个值可以是简单值 也可以是复杂类型
+数组: 数组表示可以通过数值索引访问的值的有序列表,数组的值可以是任意类型,包括简单值,对象,甚至其它数组
+```
+
+### 23.2 解析与序列化
+
+```txt
+JSON 对象 有两个方法
+stringify() 将JavaScript数据类型转为json类型 有三个参数 第一个转化对象 第二个过滤字段规则可以传对象里面键值的数组,转化结果就只包含传了的结果 第二个参数还可以是一个函数 该函数第一个参数是key 第二个为value 也可以根据key值过滤 第三个为字符串缩进起到美化输出的作用
+parse() 将json类型转为JavaScript类型
+```
+
+## 第二十四章 网络请求与远程资源
+
+### 24.1 XMLHttpRequest 对象
+
+## 第二十五章 客户端存储
+
+### 25.1 cookie
+
+```txt
+document.cookie
+
+限制:
+不超过300个cookit
+每个cookit不超过4096字节
+每个域不超过20个cookie
+每个域不能超过81920字节
+每个域能设置cookie总数也是受限制的,但不同浏览器的限制不同
+
+```
+
+### 25.2 Web Storage
+
+```txt
+localStorage 本地持久化存储
+方法取值:localStorage.getItem("name")
+方法存值:localStorage.setItem("name","hello")
+删除方法:localStorage.removeItem("name")]
+属性取值:localStorage.name
+属性存值:localStorage.name = "hello"
+当Storage对象发生变化之后会在文档上触发storage事件
+
+sessionStorage
+存储方式跟localStorage一样
+值存储回话数据, 数据只会存储到浏览器关闭.这跟浏览器关闭时会消失的回话cookie类似
+
+localStorage sessionStorage 存值限制为 每个源 5MB
+```
+
+### 25.3 IndexDB
+
+```txt
+是浏览器中存储结构化数据的一个方案 IndexDB使用对象存储而不是表格保存数据. IndexDB数据库就是在一个公共命名空间下的一组对象存储,类似于NoSQL风格的实现
+```
+
+---
+
+---
+url: /src/notes/part/javascript.md
+---
+# JavaScript
+
+## 注入js
+
+```js
+const script = document.createElement('script')
+script.src = 'https://xxx'
+const s = document.getElementsByTagName('script')[0]
+s.parentNode.insertBefore(script, s)
+```
+
+## 随机数
+
+```js
+// 浮点数
+function randomFloatNumber(min, max) {
+  return Math.random() * (max - min) + min
+}
+
+// 整数
+function randomIntNumber(min, max) {
+  return Math.floor(Math.random() * (max - min) + min)
+}
+```
+
+## 不刷新修改url地址栏
+
+```js
+window.history.replaceState(window.history.state, document.title, '修改后的url')
+```
+
+## 统计字符串中某个字符出现的次数
+
+```js
+str.split(char).length - 1
+```
+
+## 检查对象是否为空
+
+```js
+const isEmpty = obj => Object.keys(obj).length === 0
+// or
+// const isEmpty = obj => Reflect.ownKeys(obj).length === 0 && obj.constructor === Object
+```
+
+## 等待一段时间后执行
+
+```js
+const sleep = time => new Promise(resolve => setTimeout(resolve, time))
+```
+
+## image转base64
+
+```js
+// 图片文件转base64，利用canvas
+function getBase64Image(img) {
+  const canvas = document.createElement('canvas')
+  canvas.width = img.width
+  canvas.height = img.height
+  const ctx = canvas.getContext('2d')
+  ctx.drawImage(img, 0, 0, img.width, img.height)
+  const ext = img.src.substring(img.src.lastIndexOf('.') + 1).toLowerCase()
+  const dataURL = canvas.toDataURL(`image/${ext}`)
+  return dataURL
+}
+
+// 使用
+const image = new Image()
+// var image = document.createElement('image')
+image.src = 'https://bidcard.alltobid.com/cnbauth/Verification/NextCaptcha?SId=110ef5a7-7a8a-4b81-9158-27c542e253a2' // 你的图片路径
+image.onload = function () {
+  const imgBase64 = getBase64Image(image)
+  console.log(imgBase64)
+}
+```
+
+## 原生JS Toast 弹窗
+
+::: code-group
+
+```js [Toast]
+function Toast(msg, duration = 2000) {
+  const toastDOM = document.getElementById('custom_toast')
+  if (toastDOM)
+    document.body.removeChild(toastDOM)
+
+  const m = document.createElement('div')
+  m.id = 'custom_toast'
+  m.innerHTML = msg
+  m.style.cssText = 'font-size: 18px;color: rgb(255, 255, 255);background-color: rgba(0, 0, 0, 0.6);padding: 10px 15px;margin: 0 0 0 -60px;border-radius: 4px;position: fixed;    top: 50%;left: 50%;width: 130px;text-align: center;'
+  document.body.appendChild(m)
+  setTimeout(() => {
+    if (!document.body.contains(m))
+      return
+    const d = 0.5
+    m.style.opacity = '0'
+    setTimeout(() => {
+      document.body.removeChild(m)
+    }, d * 1000)
+  }, duration)
+}
+```
+
+```js [autolog]
+const cssStr = `#autolog{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;pointer-events:none;width:100vw;height:100vh;position:fixed;left:0;top:0;z-index:9999999;cursor:pointer;transition:0.2s}#autolog span{pointer-events:auto;width:max-content;animation:fadein 0.4s;animation-delay:0s;border-radius:6px;padding:10px 20px;box-shadow:0 0 10px 6px rgba(0,0,0,0.1);margin:4px;transition:0.2s;z-index:9999999;font-size:14px;display:flex;align-items:center;justify-content:center;gap:4px;height:max-content}#autolog span.hide{opacity:0;pointer-events:none;transform:translateY(-10px);height:0;padding:0;margin:0}.autolog-warn{background-color:#fffaec;color:#e29505}.autolog-error{background-color:#fde7e7;color:#d93025}.autolog-info{background-color:#e6f7ff;color:#0e6eb8}.autolog-success{background-color:#e9f7e7;color:#1a9e2c}.autolog-{background-color:#fafafa;color:#333}@keyframes fadein{0%{opacity:0;transform:translateY(-10px)}100%{opacity:1;transform:translateY(0)}}`
+const svgIcons = {
+  warn: `<svg t="1713405237257" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2387" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16"><path d="M934.4 770.133333L605.866667 181.333333C586.666667 147.2 550.4 128 512 128c-38.4 0-74.666667 21.333333-93.866667 53.333333L89.6 770.133333c-19.2 34.133333-19.2 76.8 0 110.933334S145.066667 938.666667 183.466667 938.666667h657.066666c38.4 0 74.666667-21.333333 93.866667-57.6 19.2-34.133333 19.2-76.8 0-110.933334z m-55.466667 81.066667c-8.533333 14.933333-23.466667 23.466667-38.4 23.466667H183.466667c-14.933333 0-29.866667-8.533333-38.4-23.466667-8.533333-14.933333-8.533333-34.133333 0-49.066667L473.6 213.333333c8.533333-12.8 23.466667-21.333333 38.4-21.333333s29.866667 8.533333 38.4 21.333333l328.533333 588.8c8.533333 14.933333 8.533333 32 0 49.066667z" fill="#e29505" p-id="2388"></path><path d="M512 746.666667m-42.666667 0a42.666667 42.666667 0 1 0 85.333334 0 42.666667 42.666667 0 1 0-85.333334 0Z" fill="#e29505" p-id="2389"></path><path d="M512 629.333333c17.066667 0 32-14.933333 32-32v-192c0-17.066667-14.933333-32-32-32s-32 14.933333-32 32v192c0 17.066667 14.933333 32 32 32z" fill="#e29505" p-id="2390"></path></svg>`,
+  error: `<svg t="1713405212725" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1744" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16"><path d="M512 74.666667C270.933333 74.666667 74.666667 270.933333 74.666667 512S270.933333 949.333333 512 949.333333 949.333333 753.066667 949.333333 512 753.066667 74.666667 512 74.666667z m0 810.666666c-204.8 0-373.333333-168.533333-373.333333-373.333333S307.2 138.666667 512 138.666667 885.333333 307.2 885.333333 512 716.8 885.333333 512 885.333333z" fill="#d93025" p-id="1745"></path><path d="M657.066667 360.533333c-12.8-12.8-32-12.8-44.8 0l-102.4 102.4-102.4-102.4c-12.8-12.8-32-12.8-44.8 0-12.8 12.8-12.8 32 0 44.8l102.4 102.4-102.4 102.4c-12.8 12.8-12.8 32 0 44.8 6.4 6.4 14.933333 8.533333 23.466666 8.533334s17.066667-2.133333 23.466667-8.533334l102.4-102.4 102.4 102.4c6.4 6.4 14.933333 8.533333 23.466667 8.533334s17.066667-2.133333 23.466666-8.533334c12.8-12.8 12.8-32 0-44.8l-106.666666-100.266666 102.4-102.4c12.8-12.8 12.8-34.133333 0-46.933334z" fill="#d93025" p-id="1746"></path></svg>`,
+  info: `<svg t="1713405208589" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1582" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16"><path d="M853.333333 138.666667H170.666667c-40.533333 0-74.666667 34.133333-74.666667 74.666666v512c0 40.533333 34.133333 74.666667 74.666667 74.666667h151.466666V917.333333c0 12.8 8.533333 25.6 19.2 29.866667 4.266667 2.133333 8.533333 2.133333 12.8 2.133333 8.533333 0 17.066667-4.266667 23.466667-10.666666l136.533333-138.666667H853.333333c40.533333 0 74.666667-34.133333 74.666667-74.666667V213.333333c0-40.533333-34.133333-74.666667-74.666667-74.666666z m10.666667 586.666666c0 6.4-4.266667 10.666667-10.666667 10.666667H501.333333c-8.533333 0-17.066667 4.266667-23.466666 10.666667l-89.6 93.866666V768c0-17.066667-14.933333-32-32-32H170.666667c-6.4 0-10.666667-4.266667-10.666667-10.666667V213.333333c0-6.4 4.266667-10.666667 10.666667-10.666666h682.666666c6.4 0 10.666667 4.266667 10.666667 10.666666v512z" fill="#0e6eb8" p-id="1583"></path><path d="M512 490.666667H298.666667c-17.066667 0-32 14.933333-32 32S281.6 554.666667 298.666667 554.666667h213.333333c17.066667 0 32-14.933333 32-32S529.066667 490.666667 512 490.666667zM672 341.333333H298.666667c-17.066667 0-32 14.933333-32 32S281.6 405.333333 298.666667 405.333333h373.333333c17.066667 0 32-14.933333 32-32s-14.933333-32-32-32z" fill="#0e6eb8" p-id="1584"></path></svg>`,
+  success: `<svg t="1713405224326" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2225" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16"><path d="M512 74.666667C270.933333 74.666667 74.666667 270.933333 74.666667 512S270.933333 949.333333 512 949.333333 949.333333 753.066667 949.333333 512 753.066667 74.666667 512 74.666667z m0 810.666666c-204.8 0-373.333333-168.533333-373.333333-373.333333S307.2 138.666667 512 138.666667 885.333333 307.2 885.333333 512 716.8 885.333333 512 885.333333z" fill="#1a9e2c" p-id="2226"></path><path d="M701.866667 381.866667L448 637.866667 322.133333 512c-12.8-12.8-32-12.8-44.8 0-12.8 12.8-12.8 32 0 44.8l149.333334 149.333333c6.4 6.4 14.933333 8.533333 23.466666 8.533334s17.066667-2.133333 23.466667-8.533334l277.333333-277.333333c12.8-12.8 12.8-32 0-44.8-14.933333-12.8-36.266667-12.8-49.066666-2.133333z" fill="#1a9e2c" p-id="2227"></path></svg>`,
+}
+const autolog = {
+  log(text, type = '', time = 2500) {
+    if (typeof type === 'number') {
+      time = type
+      type = ''
+    }
+    const mainEl = getMainElement()
+    let el = document.createElement('span')
+    el.className = `autolog-${type}`
+    el.innerHTML = svgIcons[type] + text
+    mainEl.appendChild(el)
+    setTimeout(() => {
+      el.classList.add('hide')
+    }, time - 500)
+    setTimeout(() => {
+      mainEl.removeChild(el)
+      el = null
+    }, time)
+  },
+}
+function getMainElement() {
+  let mainEl = document.querySelector('#autolog')
+  if (!mainEl) {
+    mainEl = document.createElement('div')
+    mainEl.id = 'autolog'
+    document.body.appendChild(mainEl)
+    const style = document.createElement('style')
+    style.innerHTML = cssStr
+    document.head.insertBefore(style, document.head.firstChild)
+  }
+  return mainEl
+}
+export default autolog
+```
+
+:::
+
+## 根据经度纬度跳转到地图
+
+::: code-group
+
+```js [百度地图]
+window.open(`http://api.map.baidu.com/marker?location=${lat},${lng}&title=${title}&content=${address}&output=html`)
+```
+
+```js [高德地图]
+window.open(`http://uri.amap.com/marker?position=${lng},${lat}&name=${title}&src=mypage&coordinate=gaode&callnative=1`)
+```
+
+```js [谷歌地图]
+window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`)
+```
+
+:::
+
+## Fetch用法
+
+::: code-group
+
+```js [Get请求]
+fetch('https://...').then(res => res.json()).then((data) => {
+
+})
+```
+
+```js [Post请求]
+fetch('https://...', {
+  method: 'post',
+  body: JSON.stringify(base),
+  headers: {
+    'Content-Type': 'application/json'
+  }
+}).then(res => res.json()).then((data) => {
+
+})
+```
+
+:::
+
+## 限制控制台调试
+
+```js
+(() => {
+  function block() {
+    if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200)
+      document.body.innerHTML = '检测到非法调试,请关闭后刷新重试!'
+
+    setInterval(() => {
+      (function () {
+        return false
+      }
+        .constructor('debugger')
+        .call())
+    }, 50)
+  }
+  try {
+    block()
+  }
+  catch (err) { }
+})()
+```
+
+## 注入Cookie
+
+```js
+// 注入Cookie 设置不过期
+document.cookie = 'name=value; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT;'
+```
+
+## 等待某个元素加载完成
+
+```js
+function waitForElm(selector) {
+  return new Promise((resolve) => {
+    const dom = document.querySelector(selector)
+    if (dom)
+      return resolve(dom)
+
+    const observer = new MutationObserver((mutations) => {
+      const elm = document.querySelector(selector)
+      if (elm) {
+        observer.disconnect()
+        resolve(elm)
+      }
+    })
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    })
+  })
+}
+```
+
+## 下载网络图片和接口返回的文件
+
+::: code-group
+
+```js [Fetch]
+fetch(url).then(res => res.blob()).then((blob) => {
+  const downloadElement = document.createElement('a')
+  const href = window.URL.createObjectURL(blob)
+  downloadElement.href = href
+  downloadElement.download = '文件名'
+  document.body.appendChild(downloadElement)
+  downloadElement.click()
+  document.body.removeChild(downloadElement)
+  window.URL.revokeObjectURL(href)
+})
+```
+
+```ts [Axios]
+const res = await axios.get(url, { params: { kind: kind.value, fileName: row.name }, responseType: 'blob' }) as Blob
+const blob = new Blob([res], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
+const downloadElement = document.createElement('a')
+const href = window.URL.createObjectURL(blob)
+downloadElement.href = href
+downloadElement.download = '文件名'
+document.body.appendChild(downloadElement)
+downloadElement.click()
+document.body.removeChild(downloadElement)
+window.URL.revokeObjectURL(href)
+```
+
+:::
+
+---
+
+---
+url: /README.md
+---
+# jie-docs
+
+This is my personal note taking
+
+[*在线地址*](https://docs.laihaojie.com)
+
+---
+
+---
+url: /src/notes/js-doc.md
+---
+# JSDoc中给函数参数添加类型
+
+## 第三方库类型
+
+```javascript
+/**
+ * @param {import('axios').AxiosRequestConfig} config
+ */
+function foo(config) {
+  // ...
+}
+```
+
+## 1. 基本类型
+
+```javascript
+/**
+ * @param {number} a
+ * @param {string} b
+ * @param {boolean} c
+ * @param {object} d
+ * @param {Array} e
+ */
+function foo(a, b, c, d, e) {
+  // ...
+}
+```
+
+## 2. 可选参数
+
+```javascript
+/**
+ * @param {number} [a]
+ * @param {string} [b]
+ * @param {boolean} [c]
+ * @param {object} [d]
+ * @param {Array} [e]
+ */
+function foo(a, b, c, d, e) {
+  // ...
+}
+```
+
+## 3. 默认值
+
+```javascript
+/**
+ * @param {number} [a]
+ * @param {string} [b]
+ * @param {boolean} [c]
+ * @param {object} [d]
+ * @param {Array} [e]
+ */
+function foo(a, b, c, d, e) {
+  // ...
+}
+```
+
+## 4. 可选参数和默认值
+
+```javascript
+/**
+ * @param {number} [a]
+ * @param {string} [b]
+ * @param {boolean} [c]
+ * @param {object} [d]
+ * @param {Array} [e]
+ */
+function foo(a, b, c, d, e) {
+  // ...
+}
+```
+
+## 5. 可变参数
+
+```javascript
+/**
+ * @param {...number} a
+ * @param {...string} b
+ * @param {...boolean} c
+ * @param {...object} d
+ * @param {...Array} e
+ */
+function foo(a, b, c, d, e) {
+  // ...
+}
+```
+
+---
+
+---
+url: /src/notes/bignumber.md
+---
+# JS浮点数运算
+
+[`decimal.js`](https://github.com/MikeMcl/decimal.js)
+
+[`bignumber.js`](https://github.com/MikeMcl/bignumber.js)
+
+* 安装
+
+::: code-group
+
+```sh [decimal.js]
+pnpm install decimal.js
+```
+
+```sh [bignumber.js]
+pnpm install bignumber.js
+```
+
+:::
+
+* 使用
+
+::: code-group
+
+```js [decimal.js]
+import Decimal from 'decimal.js'
+
+const a = new Decimal(0.1) // 0.1
+const b = new Decimal(0.2) // 0.2
+const c = a.plus(b) // 0.3
+console.log(c.toNumber())
+```
+
+```js [bignumber.js]
+import BigNumber from 'bignumber.js'
+
+const a = new BigNumber(0.1) // 0.1
+const b = new BigNumber(0.2) // 0.2
+const c = a.plus(b) // 0.3
+console.log(c.toNumber())
+```
+
+:::
+
+---
+
+---
+url: /src/notes/markdown.md
+---
+# Markdown语法
+
+[MarkDown教程](https://www.runoob.com/markdown/md-tutorial.html)
+
+## 标题，可以生成锚点目录
+
+```
+# 一级标题
+## 二级标题
+### 三级标题
+#### 四级标题
+##### 五级标题
+###### 六级标题
+```
+
+## 段落与格式
+
+### 段落
+
+Markdown 段落没有特殊的格式，直接编写文字就好，**段落的换行是使用两个以上空格加上回车。**
+
+### 字体
+
+|格式| 例子 | 代码|
+|--|--|--|
+|斜体|*斜体*|\*斜体文本\*|
+|粗体|**粗体**|\*\*粗体文本\*\*|
+|粗斜体|***粗斜体***|\*\*\*粗斜体文本\*\*\*|
+|删除线|~~删除线文本~~|~~删除线文本~~|
+|下划线|下划线文本|\<u>下划线文本\</u>|
+
+### 分隔线
+
+```txt
+***
+- - -
+```
+
+***
+
+***
+
+## 列表
+
+* 第一项
+* 第二项
+* 第三项
+
+代码如下
+
+```
+* 第一项
+* 第二项
+* 第三项
+```
+
+## 代码块
+
+```javascript
+$(document).ready(() => {
+  alert('RUNOOB')
+})
+```
+
+````
+```javascript
+$(document).ready(function () {
+    alert('RUNOOB');
+});
+```
+````
+
+## 表格
+
+|学校|学生姓名|
+|----|----|
+|幼儿园|张三|
+|小学|李四|
+
+```
+|学校|学生姓名|
+|----|----|
+|幼儿园|张三|
+|小学|李四|
+```
+
+## 链接
+
+[文字超链接](https://www.w3school.com.cn/i/eg_mouse.jpg)
+![图片](https://www.w3school.com.cn/i/eg_mouse.jpg)
+<https://www.lingman.tech>
+
+```
+[文字超链接](https://www.w3school.com.cn/i/eg_mouse.jpg)
+![鼠标](https://www.w3school.com.cn/i/eg_mouse.jpg)
+<https://www.lingman.tech>
+```
+
+## 区块
+
+> 区块引用
+> 菜鸟教程
+> 学的不仅是技术更是梦想
+
+```
+> 区块引用
+> 菜鸟教程
+> 学的不仅是技术更是梦想
+```
+
+$L(\hat{y},y)=-\[y\log\hat{y}+(1-y)\log(1-\hat{y})]$
+
+---
+
+---
+url: /src/framework/mongodb.md
+---
+# MongoDB
+
+## 安装
+
+* 官网下载：[MongoDB](https://www.mongodb.com/try/download)
+
+---
+
+---
+url: /src/framework/mongodb/crud.md
+---
+# mongodb 增删改查
+
+## 增
+
+```js
+aa
+```
+
+|格式| 例子 | 代码|
+|--|--|--|
+|斜体|*斜体*|\*斜体文本\*|
+|粗体|**粗体**|\*\*粗体文本\*\*|
+|粗斜体|***粗斜体***|\*\*\*粗斜体文本\*\*\*|
+|删除线|删除线文本|\<u>删除线文本\</u>|
+|下划线|下划线文本|\<u>下划线文本\</u>|
+
+***
+
+q
+
+***
+
+q
+
+***
+
+qss
+
+***
+
+## qs
+
+---
+
+---
+url: /src/notes/part/node.md
+---
+# NodeJS
+
+## 个人Package
+
+::: code-group
+
+```bash [前端]
+pnpm i @djie/eslint-config@latest @djie/vite-plugin-vue-inspector@latest @djie/unocss@latest -D
+```
+
+:::
+
+## 递归删除node\_modules以及子文件夹所有node\_modules
+
+::: code-group
+
+```bash [Windows PowerShell]
+Get-ChildItem -Path . -Recurse -Directory -Filter node_modules | ForEach-Object { Remove-Item -Recurse -Force $_.FullName }
+
+# 这个命令的解释如下：
+
+# Get-ChildItem -Path . -Recurse -Directory -Filter node_modules：递归地获取当前目录及其子目录中名为 node_modules 的文件夹。
+# ForEach-Object { Remove-Item -Recurse -Force $_.FullName }：对每个找到的 node_modules 文件夹执行删除操作。
+```
+
+```bash [Linux Mac]
+find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
+
+# 这个命令的解释如下：
+
+# find .：从当前目录开始查找。
+# -name "node_modules"：查找名称为 node_modules 的目录。
+# -type d：只查找目录（不是文件）。
+# -prune：防止 find 命令递归到 node_modules 目录中，从而提高效率。
+# -exec rm -rf '{}' +：对于每个找到的目录，执行 rm -rf 命令删除该目录及其内容。
+```
+
+:::
+
+## \_\_dirname
+
+```js
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __filename = fileURLToPath(import.meta.url)
+
+const __dirname = path.dirname(__filename)
+```
+
+## 下载图片
+
+```js
+const axios = require('axios')
+
+axios({
+  method: 'get',
+  url: 'image_url.png',
+  responseType: 'stream',
+})
+  .then((response) => {
+    response.data.pipe(fs.createWriteStream('images/name.png'))
+  })
+```
+
+## 控制台替换输出 （输出百分比进度）
+
+```js
+process.stdout.clearLine()
+process.stdout.cursorTo(0)
+process.stdout.write(`下载进度：${percent}%`)
+```
+
+## 把文件压缩成zip
+
+::: code-group
+
+```bash [npm]
+npm i adm-zip
+```
+
+```bash [yarn]
+yarn add adm-zip
+```
+
+```bash [pnpm]
+pnpm i adm-zip
+```
+
+:::
+
+### 压缩
+
+```js
+import fs from 'node:fs'
+import path from 'node:path'
+import process from 'node:process'
+import AdmZip from 'adm-zip'
+
+function zipFolder() {
+  const folderPath = path.resolve(process.cwd(), 'dist')
+  // Example usage
+  const outputPath = path.resolve(process.cwd(), 'dist.zip')
+
+  return new Promise((resolve, reject) => {
+    // Create a new zip instance
+    const zip = new AdmZip()
+
+    zip.addLocalFolder(folderPath)
+
+    // Write the zip file
+    zip.writeZip(outputPath, (err) => {
+      if (err) {
+        reject(err)
+      }
+      else {
+        // 读取压缩后的文件 返回
+        const data = fs.readFileSync(outputPath)
+        resolve(data)
+      }
+    })
+  })
+}
+```
+
+### 解压
+
+```js
+import fs from 'node:fs'
+import path from 'node:path'
+import process from 'node:process'
+import AdmZip from 'adm-zip'
+
+function unzipFile() {
+  const zipPath = path.resolve(process.cwd(), 'dist.zip')
+  const outputPath = path.resolve(process.cwd(), 'dist')
+
+  return new Promise((resolve, reject) => {
+    const zip = new AdmZip(zipPath)
+
+    // 解压到指定目录 强制覆盖
+    zip.extractAllTo(outputPath, true)
+
+    resolve()
+  })
+}
+```
+
+## 限制并发请求
+
+### 示例
+
+### 代码
+
+<<< @/src/notes/part/components/p-limit.vue
+
+---
+
+---
+url: /src/develop/node/nodemon.md
+---
+# nodemon
+
+## 安装
+
+```sh
+npm install -g nodemon
+```
+
+## 单个文件运行
+
+```json
+{
+  "script": "nodemon index.js"
+}
+```
+
+## 使用配置文件运行
+
+```json
+{
+  "watch": [
+    "app/**/*.ts",
+    "./index.ts",
+    "utils/**/*.ts"
+  ],
+  "ignore": ["node_modules"],
+  "exec": "ts-node index.ts",
+  "ext": "ts"
+}
+```
+
+---
+
+---
+url: /src/engineering/scripts.md
+---
+# node脚本
+
+* 初始化
+
+```sh
+npm init -y
+```
+
+* 在package.json中配置bin目录
+
+```json
+{
+  "bin": {
+    "my-cli": "./index.js"
+  }
+}
+```
+
+* 在index.js第一行声明脚本类型
+
+```js
+#!/usr/bin/env node
+```
+
+* 本地测试
+
+```sh
+npm link
+```
+
+然后就可以在本地目录下执行my-cli了
+
+* 删除本地链接
+
+```sh
+npm ls --global --depth 0     // 列出所有顶级依赖项
+npm ls --global package_name // 检查是否安装了包
+npm rm --global package_name  // 卸载全局链接的package_name包
+```
+
+---
+
+---
+url: /src/notes/npmrc.md
+---
+# npmrc
+
+```txt
+# 是否严格比较同等级依赖关系 默认为true
+strict-peer-dependencies=false
+ignore-workspace-root-check=true
+
+# 用pnpm时是否扁平化node_modules
+node-linker=hoisted
+shamefully-hoist=true
+
+# 换源
+# 淘宝源
+registry=https://registry.npmmirror.com/
+# npm源
+registry=https://registry.npmjs.org/
+```
+
+---
+
+---
+url: /src/engineering/npm-github.md
+---
+# npm安装github仓库包
+
+```sh
+# 直接安装
+npm install https://github.com/laihaojie/repo_name.git
+npm install git+https://github.com/laihaojie/repo_name.git
+
+# 通过github用户名和仓库名安装
+npm install laihaojie/repo_name
+npm install github:laihaojie/repo_name
+
+# 通过ssh key 安装
+npm install git+ssh://git@github.com:laihaojie/private_repo_name.git
+
+# 安装指定版本
+npm install https://github.com/laihaojie/private_repo_name.git#2.0
+npm install git+https://github.com/laihaojie/private_repo_name.git#2.0
+```
+
+---
+
+---
+url: /src/develop/node/registry.md
+---
+# npm源
+
+* 查看当前源
+
+```sh
+npm config get registry
+```
+
+* 换源
+
+::: code-group
+
+```sh [淘宝源]
+npm config set registry https://registry.npmmirror.com/
+```
+
+```sh [NPM源]
+npm config set registry https://registry.npmjs.org/
+```
+
+:::
+
+## nrm管理npm源
+
+* 安装
+
+```sh
+npm install -g nrm open@8.4.2
+```
+
+* 使用
+
+```sh
+# 查看当前源
+nrm current
+
+# 查看源列表
+nrm ls
+
+# 切换源
+nrm use <name>
+
+# 添加新源
+nrm add <名称> <源地址>
+nrm add tb https://registry.npmmirror.com/
+
+# 删除源
+nrm del <registry>
+
+# 测试源响应速度
+nrm test <name>
+```
+
+---
+
+---
+url: /src/notes/package.md
+---
+# package.json
+
+```json
+{
+  "script": {
+    "release": "npx bumpp && npm publish --access public --registry https://registry.npmjs.org"
+  }
+}
+```
+
+## 限制node版本
+
+```json
+{
+  "engines": {
+    "node": ">=16.16.0",
+    "yarn": ">=1.22.4"
+  }
+}
+```
+
+---
+
+---
+url: /src/develop/node/publish.md
+---
+# package相关
+
+## 发布package
+
+* 发布普通包
+
+```sh
+npm publish --registry https://registry.npmjs.org
+```
+
+* 发布组织包
+
+```sh
+npm publish --access public --registry https://registry.npmjs.org
+```
+
+## 查看package信息
+
+```sh
+npm view packageName
+
+# 查看具体版本信息
+npm view packageName version
+```
+
+---
+
+---
+url: /src/framework/nestjs/sequelize.md
+---
+# sequelize
+
+## 安装
+
+```sh
+pnpm i mysql2 sequelize sequelize-typescript
+pnpm i sequelize-auto -D
+```
+
+* sequelize-auto -h 数据库的IP地址 -d 数据库名 -u 用户名 -x 密码 -p 端口 -t 表名 -o 文件夹相对位置
+* "sync": "sequelize-auto -h xxx.xxxx.xx -d dbName -u root -x \*\*\*\*\* -p 3306  -o src/db/models -l ts",
+
+---
+
+---
+url: /src/develop/git/tag.md
+---
+# tag操作
+
+## 查询commit的hash值
+
+```bash
+git log --pretty=oneline --abbrev-commit
+```
+
+## 创建tag
+
+xxxx代表的是查询commit的hash值
+
+```bash
+git tag v1.0.0 xxxx
+```
+
+## 查看tag
+
+```bash
+git tag
+```
+
+## 提交tag远程仓库
+
+```bash
+git push --tags
+```
+
+## 删除本地tag
+
+```bash
+git tag -d v1.0.0
+```
+
+## 删除远程tag
+
+```bash
+git push origin :refs/tags/v1.0.0
+```
+
+---
+
+---
+url: /src/fun/python.md
+---
+# TheFuck
+
+## 效果
+
+## 安装
+
+::: code-group
+
+```bash [Linux, macOS]
+brew install thefuck
+```
+
+```bash [Windows]
+pip install thefuck
+```
+
+:::
+
+## 问题
+
+将此命令放置在您的 .bashrc 或 $profile 其他启动脚本中
+
+::: code-group
+
+```bash [ Git Bash ]
+export PYTHONIOENCODING="utf-8"
+
+eval $(thefuck --alias)
+```
+
+```bash [ Powershell ]
+
+$env:PYTHONIOENCODING="utf-8"
+
+iex "$(thefuck --alias)"
+```
+
+:::
+
+---
+
+---
+url: /src/engineering/tsup.md
+---
+# tsup
+
+* 安装 tsup
+
+```sh
+pnpm i tsup -D
+
+# 如果tsconfig.json 中开启了emitDecoratorMetadata 还需要安装 @swc/core
+pnpm i @swc/core -D
+```
+
+```sh
+npx tsup ./index.ts --dts --format cjs,esm,iife -d ./dist
+```
+
+## tsup 配置
+
+```ts
+import type { Options } from 'tsup'
+
+export const tsup: Options = {
+  entry: [
+    'src/*.ts',
+  ],
+  format: ['cjs', 'esm'],
+  dts: true,
+  splitting: true,
+  clean: true,
+  shims: true,
+  // 跳过 node_modules 打包
+  // skipNodeModulesBundle: true,
+  // 跳过指定 package 打包
+  external: ['miniprogram-ci']
+}
+```
+
+---
+
+---
+url: /src/notes/typescript.md
+---
+# TypeScript
+
+## 配置文件
+
+* files - 设置要编译的文件的名称；
+* include - 设置需要进行编译的文件，支持路径模式匹配；
+* exclude - 设置无需进行编译的文件，支持路径模式匹配；
+* compilerOptions - 设置与编译流程相关的选项。
+
+```json
+{
+  "compilerOptions": {
+
+    /* 基本选项 */
+    "target": "es5", // 指定 ECMAScript 目标版本: 'ES3' (default), 'ES5', 'ES6'/'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'
+    "module": "commonjs", // 指定使用模块: 'commonjs', 'amd', 'system', 'umd' or 'es2015'
+    "lib": [], // 指定要包含在编译中的库文件
+    "allowJs": true, // 允许编译 javascript 文件
+    "checkJs": true, // 报告 javascript 文件中的错误
+    "jsx": "preserve", // 指定 jsx 代码的生成: 'preserve', 'react-native', or 'react'
+    "declaration": true, // 生成相应的 '.d.ts' 文件
+    "sourceMap": true, // 生成相应的 '.map' 文件
+    "outFile": "./", // 将输出文件合并为一个文件
+    "outDir": "./", // 指定输出目录
+    "rootDir": "./", // 用来控制输出目录结构 --outDir.
+    "removeComments": true, // 删除编译后的所有的注释
+    "noEmit": true, // 不生成输出文件
+    "importHelpers": true, // 从 tslib 导入辅助工具函数
+    "isolatedModules": true, // 将每个文件做为单独的模块 （与 'ts.transpileModule' 类似）.
+
+    /* 严格的类型检查选项 */
+    "strict": true, // 启用所有严格类型检查选项
+    "noImplicitAny": true, // 在表达式和声明上有隐含的 any类型时报错
+    "strictNullChecks": true, // 启用严格的 null 检查
+    "noImplicitThis": true, // 当 this 表达式值为 any 类型的时候，生成一个错误
+    "alwaysStrict": true, // 以严格模式检查每个模块，并在每个文件里加入 'use strict'
+
+    /* 额外的检查 */
+    "noUnusedLocals": true, // 有未使用的变量时，抛出错误
+    "noUnusedParameters": true, // 有未使用的参数时，抛出错误
+    "noImplicitReturns": true, // 并不是所有函数里的代码都有返回值时，抛出错误
+    "noFallthroughCasesInSwitch": true, // 报告 switch 语句的 fallthrough 错误。（即，不允许 switch 的 case 语句贯穿）
+
+    /* 模块解析选项 */
+    "moduleResolution": "node", // 选择模块解析策略： 'node' (Node.js) or 'classic' (TypeScript pre-1.6)
+    "baseUrl": "./", // 用于解析非相对模块名称的基目录
+    "paths": {}, // 模块名到基于 baseUrl 的路径映射的列表
+    "rootDirs": [], // 根文件夹列表，其组合内容表示项目运行时的结构内容
+    "typeRoots": [], // 包含类型声明的文件列表
+    "types": [], // 需要包含的类型声明文件名列表
+    "allowSyntheticDefaultImports": true, // 允许从没有设置默认导出的模块中默认导入。
+
+    /* Source Map Options */
+    "sourceRoot": "./", // 指定调试器应该找到 TypeScript 文件而不是源文件的位置
+    "mapRoot": "./", // 指定调试器应该找到映射文件而不是生成文件的位置
+    "inlineSourceMap": true, // 生成单个 soucemaps 文件，而不是将 sourcemaps 生成不同的文件
+    "inlineSources": true, // 将代码与 sourcemaps 生成到一个文件中，要求同时设置了 --inlineSourceMap 或 --sourceMap 属性
+
+    /* 其他选项 */
+    "experimentalDecorators": true, // 启用装饰器
+    "emitDecoratorMetadata": true // 为装饰器提供元数据的支持
+  }
+}
+```
+
+## 强制断言
+
+```ts
+const name: string = '阿杰'
+const age: number = name as unknown as number
+```
+
+## as const
+
+```ts
+const a = 1 as const // 这时候 a 的类型就不是number了，而是一个常量一个具体值(1)，不能改变
+const list = [1, '2', 3] as const // 将数组转换为常量  元祖(tuple)，不能改变
+const obj = { a: 1, b: 2 } as const // 将对象转换为常量  对象(object)，不能改变
+```
+
+## 装饰器 Decorator
+
+* 装饰器类型
+
+```ts
+declare type ClassDecorator = <TFunction extends Function>(target: TFunction) => TFunction | void
+declare type PropertyDecorator = (target: object, propertyKey: string | symbol) => void
+declare type MethodDecorator = <T>(target: object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
+declare type ParameterDecorator = (target: object, propertyKey: string | symbol, parameterIndex: number) => void
+```
+
+* 类装饰器
+
+```ts
+const classDecorator: ClassDecorator = (target: Function) => {
+  console.log(target)
+  target.prototype.getName = function () {
+    return target.name
+  }
+}
+@classDecorator
+class User {}
+
+const user: any = new User()
+
+console.log(user.getName())
+```
+
+* 方法装饰器
+
+```ts
+const methodDecorator: MethodDecorator = (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+  const method = descriptor.value
+  descriptor.value = function () {
+    const res = method()
+    console.log(res)
+    return res
+  }
+}
+
+class Cat {
+  @methodDecorator
+  public sayHello() {
+    return 'Hello World'
+  }
+}
+new Cat().sayHello()
+```
+
+* 装饰器工厂
+
+```ts
+function DecoratorFactory(str: string): ClassDecorator {
+  return (target: Function) => {
+    console.log(target)
+    target.prototype.getName = function () {
+      return target.name + str
+    }
+  }
+}
+
+@DecoratorFactory('hello')
+class User {}
+
+const user: any = new User()
+
+console.log(user.getName())
+```
+
+---
+
+---
+url: /src/framework/uniapp/uniapp_part.md
+---
+# uniapp 代码片段
+
+## css变量
+
+`--status-bar-height` 系统状态栏高度
+`--window-top` 内容区域距离顶部的距离
+`--window-bottom` 内容区域距离底部的距离
+
+获取上安全距离： env(safe-area-inset-top)
+
+获取左安全距离：env(safe-area-inset-left)
+
+获取右安全距离：env(safe-area-inset-right)
+
+获取下安全距离：env(safe-area-inset-bottom)
+
+可以在底部的盒子加下内边距 padding-bottom: env(safe-area-inset-bottom) 避免元素被遮挡。
+
+## 去除首页警告弹窗
+
+```json
+// 在manifest.json  app-puls中添加
+{
+  "app-plus": {
+    "compatible": {
+      "ignoreVersion": true
+    }
+  }
+}
+```
+
+---
+
+---
+url: /src/frontend/unocss.md
+---
+# UnoCss
+
+## 使用
+
+::: code-group
+
+```bash [pnpm]
+pnpm add -D unocss
+```
+
+```bash [yarn]
+yarn add -D unocss
+```
+
+```bash [npm]
+npm install -D unocss
+```
+
+:::
+
+## 配置 vite.config.ts
+
+```ts
+// vite.config.ts
+import UnoCSS from 'unocss/vite'
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  plugins: [
+    UnoCSS(),
+  ],
+})
+```
+
+添加 `virtual:uno.css` 到你的 `main.ts` 文件中:
+
+```ts
+// main.ts
+import 'virtual:uno.css'
+```
+
+## 配置 uno.config.ts
+
+```js
+import {
+  defineConfig,
+  presetAttributify,
+  presetIcons,
+  presetTypography,
+  presetUno,
+  presetWebFonts,
+  transformerDirectives,
+  transformerVariantGroup,
+} from 'unocss'
+
+export default defineConfig({
+  shortcuts: [
+    ['btn', 'px-4 py-1 rounded inline-block bg-teal-700 text-white cursor-pointer !outline-none hover:bg-teal-800 disabled:cursor-default disabled:bg-gray-600 disabled:opacity-50'],
+    ['icon-btn', 'inline-block cursor-pointer select-none opacity-75 transition duration-200 ease-in-out hover:opacity-100 hover:text-teal-600'],
+    ['fc', 'flex justify-center items-center'],
+    ['bc', 'c-#005CEC b-b-2px  b-#005CEC'],
+    ['dian', 'w6px h6px b-3px b-#005CEC rounded-3px mt6px mr10px'],
+    ['cf', 'before:content-[""] after:content-[""] before:table after:table after:clear-both after:hidden [zoom:1]'],
+    ['fl', 'float-left'],
+    ['fr', 'float-right'],
+  ],
+  presets: [
+    presetUno(),
+    presetAttributify(),
+    presetIcons({
+      scale: 1.2,
+      warn: true,
+    }),
+    presetTypography(),
+    presetWebFonts({
+      fonts: {
+        sans: 'DM Sans',
+        serif: 'DM Serif Display',
+        mono: 'DM Mono',
+      },
+    }),
+  ],
+  transformers: [
+    transformerDirectives(),
+    transformerVariantGroup(),
+  ],
+  safelist: 'prose m-auto text-left'.split(' '),
+})
+```
+
+---
+
+---
+url: /login.md
+---
+
+
+---
+
+---
+url: /src/frontend/unocss/icon.md
+---
+::: code-group
+
+```bash [npm]
+npm i @iconify-json/carbon
+```
+
+```bash [yarn]
+yarn add @iconify-json/carbon
+```
+
+```bash [pnpm]
+pnpm i @iconify-json/carbon
+```
+
+:::
+
+---
+
+---
+url: /src/fun/frontend/css.md
+---
+## clip-path 预览效果
+
+## clip-path 代码实现
+
+<<< @/src/fun/frontend/components/css/clip\_path.vue
+
+## perspective 预览效果
+
+## perspective 代码实现
+
+<<< @/src/fun/frontend/components/css/perspective.vue
+
+## filter 预览效果
+
+## filter 代码实现
+
+<<< @/src/fun/frontend/components/css/filter.vue
+
+---
+
+---
+url: /src/fun/frontend/particle.md
+---
+## 预览效果
+
+## 代码实现
+
+```html
+
+<div id="particles-js"></div>
+
+<script src="particles.js"></script>
+```
+
+<<< @/public/js/index.js#snippet
+
+---
+
+---
+url: /src/fun/python/part.md
+---
+## 起一个临时文件服务器
+
+```bash
+python -m http.server 8000
+```
+
+---
+
+---
+url: /src/notes/part/vue3.md
+---
+## 增删改查
+
+<<< @/src/notes/part/static/crud.vue
+
+---
+
+---
+url: /src/utils/vscode/my.md
+---
+```json
+{
+  "workbench.editorAssociations": {
+    "*.ipynb": "jupyter.notebook.ipynb"
+  },
+  "jie.background": [
+    {
+      "key": "yyx",
+      "description": "尤雨溪",
+      "address": "https://file.tihangstudio.cn/image/yyx.png"
+    },
+    {
+      "key": "xjj",
+      "description": "图一",
+      "address": "https://img.tusu.cc/XL/Tu/2022/07/7082313558130391302.jpg"
+    },
+    {
+      "key": "meinv",
+      "description": "图二",
+      "address": "https://s.laihaojie.com/img/image.png"
+    },
+    {
+      "key": "emoji",
+      "description": "emoji",
+      "address": "https://s.laihaojie.com/img/smiling-face-with-sunglasses_1f60e.png"
+    }
+  ],
+  "jie.defaultBackground": "yyx",
+  // vim配置
+  "vim.leader": "<Space>",
+  "vim.easymotion": true,
+  "vim.sneak": true,
+  "vim.handleKeys": {
+    "<C-c>": false,
+    "<C-a>": false,
+    "<C-x>": false,
+    "<C-f>": false,
+    "<C-r>": false,
+    "<C-h>": false,
+    "<C-s>": false,
+    "<C-z>": false,
+    "<C-y>": false,
+    "<C-v>": false,
+    "<C-i>": false,
+    "<C-p>": false,
+    "<C-d>": false
+  },
+  "vim.normalModeKeyBindings": [
+    {
+      "before": [
+        "H"
+      ],
+      "after": [
+        "^"
+      ]
+    },
+    {
+      "before": [
+        "L"
+      ],
+      "after": [
+        "g",
+        "_"
+      ]
+    },
+    {
+      "before": [
+        "J"
+      ],
+      "after": [
+        "5",
+        "j"
+      ]
+    },
+    {
+      "before": [
+        "K"
+      ],
+      "after": [
+        "5",
+        "k"
+      ]
+    }
+  ],
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": [
+        "J"
+      ],
+      "after": [
+        "5",
+        "j"
+      ]
+    },
+    {
+      "before": [
+        "K"
+      ],
+      "after": [
+        "5",
+        "k"
+      ]
+    },
+    {
+      "before": [
+        "f"
+      ],
+      "after": [
+        "s"
+      ]
+    },
+    {
+      "before": [
+        "F"
+      ],
+      "after": [
+        "S"
+      ]
+    },
+    {
+      "before": [
+        "s"
+      ],
+      "after": [
+        "c",
+        "l"
+      ]
+    },
+    {
+      "before": [
+        "S"
+      ],
+      "after": [
+        "^",
+        "C"
+      ]
+    }
+  ],
+  "vim.visualModeKeyBindings": [
+    {
+      "before": [
+        "H"
+      ],
+      "after": [
+        "^"
+      ]
+    },
+    {
+      "before": [
+        "L"
+      ],
+      "after": [
+        "g",
+        "_"
+      ]
+    },
+    {
+      "before": [
+        "J"
+      ],
+      "after": [
+        "5",
+        "j"
+      ]
+    },
+    {
+      "before": [
+        "K"
+      ],
+      "after": [
+        "5",
+        "k"
+      ]
+    }
+  ],
+  "vim.visualModeKeyBindingsNonRecursive": [
+    {
+      "before": [
+        "f"
+      ],
+      "after": [
+        "s"
+      ]
+    }
+  ],
+  "vim.operatorPendingModeKeyBindings": [
+    {
+      "before": [
+        "H"
+      ],
+      "after": [
+        "^"
+      ]
+    },
+    {
+      "before": [
+        "L"
+      ],
+      "after": [
+        "g",
+        "_"
+      ]
+    }
+  ],
+  "vim.operatorPendingModeKeyBindingsNonRecursive": [
+    {
+      "before": [
+        "f"
+      ],
+      "after": [
+        "z"
+      ]
+    },
+    {
+      "before": [
+        "F"
+      ],
+      "after": [
+        "Z"
+      ]
+    }
+  ],
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "security.workspace.trust.untrustedFiles": "open",
+  "path-autocomplete.extensionOnImport": true,
+  "liveServer.settings.donotShowInfoMsg": true,
+  "cSpell.customDictionaries": {
+    "custom-dictionary-user": {
+      "name": "custom-dictionary-user",
+      "path": "~/.cspell/custom-dictionary-user.txt",
+      "addWords": true,
+      "scope": "user"
+    }
+  },
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "errorLens.enabledDiagnosticLevels": [
+    "error",
+    "warning"
+  ],
+  // copilot 配置
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": true,
+    "markdown": true,
+    "scminput": false,
+    "yaml": true,
+    "javascript": true,
+    "typescriptreact": true,
+    "jsonc": true,
+    "json": true
+  },
+  // volar 配置
+  "volar.autoCompleteRefs": false,
+  "volar.codeLens.pugTools": false,
+  "volar.codeLens.scriptSetupTools": true,
+  "volar.completion.preferredTagNameCase": "pascal",
+  "files.associations": {
+    "*.cjson": "jsonc",
+    "*.wxss": "css",
+    "*.wxs": "javascript",
+    "*.nvue": "vue",
+    "*.jie": "c:\\Users\\lu\\Documents\\my-project\\vscode-extension\\icons\\icon.svg"
+  },
+  "emmet.includeLanguages": {
+    "wxml": "html"
+  },
+  // html提示配置
+  "htmlhint.options": {
+    "attr-lowercase": false
+  },
+  "minapp-vscode.disableAutoConfig": true,
+  "editor.inlineSuggest.enabled": true,
+  // 文件格式化配置
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  // eslint
+  // Disable the default formatter, use eslint instead
+  "prettier.enable": false,
+  "editor.formatOnSave": false,
+  // Auto fix
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never"
+  },
+  // Silent the stylistic rules in you IDE, but still auto fix them
+  "eslint.rules.customizations": [
+    {
+      "rule": "style/*",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "format/*",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-indent",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-spacing",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-spaces",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-order",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-dangle",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*-newline",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*quotes",
+      "severity": "off",
+      "fixable": true
+    },
+    {
+      "rule": "*semi",
+      "severity": "off",
+      "fixable": true
+    }
+  ],
+  // Enable eslint for all supported languages
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "html",
+    "markdown",
+    "json",
+    "jsonc",
+    "yaml",
+    "toml",
+    "xml",
+    "gql",
+    "graphql",
+    "astro",
+    "svelte",
+    "css",
+    "less",
+    "scss",
+    "pcss",
+    "postcss"
+  ],
+  // 打开终端配置
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell"
+    },
+    "Command Prompt": {
+      "path": [
+        "${env:windir}\\Sysnative\\cmd.exe",
+        "${env:windir}\\System32\\cmd.exe"
+      ],
+      "args": [],
+      "icon": "terminal-cmd"
+    },
+    "Git Bash": {
+      "source": "Git Bash"
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  // 修改底部状态栏颜色
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#3C3C3C"
+  },
+  // 注释
+  "editor.tokenColorCustomizations": {
+    "comments": "#6b6b6b"
+  },
+  "editor.guides.bracketPairs": "active",
+  // dart 配置
+  "dart.flutterCreateOrganization": "com.lingman",
+  "gitlens.advanced.messages": {
+    "suppressLineUncommittedWarning": true
+  },
+  "dart.debugExternalPackageLibraries": false,
+  "dart.debugSdkLibraries": false,
+  "dart.lineLength": 800,
+  "workbench.startupEditor": "none",
+  "explorer.confirmDragAndDrop": false,
+  "editor.stickyScroll.enabled": true,
+  "[scss]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+  },
+  "editor.tabSize": 2,
+  "editor.accessibilitySupport": "off",
+  "workbench.layoutControl.enabled": false,
+  "workbench.tree.enableStickyScroll": true,
+  // Unknown at rule @apply scss
+  "css.validate": false,
+  "scss.validate": false,
+  "less.validate": false,
+  "window.zoomLevel": 1,
+  // 文件夹展开
+  "explorer.compactFolders": false,
+  // 改为false即可禁止拖动
+  "editor.dragAndDrop": false,
+  "editor.unicodeHighlight.allowedLocales": {
+    "ja": true,
+    "zh-hant": true
+  },
+  "github.copilot.editor.enableAutoCompletions": true,
+  // 如下是被vscode认为是单词分隔符的字符  比如material-icon-theme 会被认为是三个单词
+  // "editor.wordSeparators": "`~#!@$%^&*()=+[{]}\\|;:'\",<>/?."
+  "python.formatting.provider": "black",
+  "workbench.iconTheme": "material-icon-theme",
+  "terminal.integrated.enableMultiLinePasteWarning": false,
+  "vue.codeActions.enabled": false
+}
+```
+
+---
+
+---
+url: /test.md
+---
+
+## h1 {{count}}
+
+## h2 {{count}}
+
+:tada: :100:
+
+| Tables        |      Are{{count}}      |  Cool |
+| ------------- | :-----------: | ----: |
+| col 3 is      | right-aligned | $1600 |
+| col {{count}} is      |   centered    |   $12 |
+| zebra stripes |   are neat    |    $1 |
+
+---
+
+---
+url: /src/video.md
+---
+# Video
+
+---
+
+---
+url: /src/develop/vim.md
+---
+# Vim
+
+## 存活下来
+
+## 掌握行相关命令
+
+## 掌握wim的语法
+
+## 更有效的处理单字符&撤销
+
+## 掌握可视化模式
+
+## 掌握文本对象
+
+## 在单文件中移动的更快
+
+## 掌握搜索命令
+
+## 快速移动想去哪里就去哪里
+
+## 认识数字和点的威力
+
+## 掌握多文件之间的跳转
+
+## 处理包裹字符的符号
+
+## 替换字符
+
+## 掌握悬浮显示&大小写&注释
+
+## 掌握窗口的管理
+
+## 如何删除一个函数
+
+## 掌握宏
+
+## 调用vscode命令
+
+---
+
+---
+url: /src/notes/vite.md
+---
+# vite配置
+
+```ts
+// import legacy from '@vitejs/plugin-legacy'
+import vue from '@vitejs/plugin-vue'
+import Unocss from 'unocss/vite'
+import AutoImport from 'unplugin-auto-import/vite'
+import { defineConfig } from 'vite'
+
+export default defineConfig({
+  plugins: [
+    vue(),
+    AutoImport({
+      imports: ['vue', '@vueuse/core'],
+      dts: true,
+    }),
+    Unocss(),
+    // legacy({
+    //   targets: ['> 1%, last 1 version, ie >= 11'],
+    //   additionalLegacyPolyfills: ['regenerator-runtime/runtime'], // 面向IE11时需要此插件
+    // }),
+  ],
+  build: {
+    rollupOptions: {
+      input: {
+        app: './login.html', // 打包的入口文件
+      },
+    },
+    outDir: './docs/public/', // 打包的输出目录
+    // assetsDir: 'login-assets', // 打包的静态资源目录
+    emptyOutDir: false, // 是否清空输出目录
+  },
+  publicDir: 'src/public',
+  server: {
+    open: '/login.html', // 打开的页面
+  },
+})
+```
+
+```ts twoslash
+console.log('hello')
+//      ^?
+```
+
+---
+
+---
+url: /src/develop/vim/vscode.md
+---
+# Vscode
+
+## 操作文件
+
+## 操作多个vscode窗口
+
+## 掌握搜索
+
+## 编码快捷键
+
+## 发现使用快捷键的场景
+
+## 搞定Git
+
+## snippets代码片段
+
+## 重构
+
+## VSpaceCode
+
+## 终端
+
+## debugger
+
+---
+
+---
+url: /src/utils/vscode.md
+---
+# VsCode插件
+
+* `复制插件ID在vscode插件市场搜索`
+
+## 驼峰翻译助手
+
+```
+svenzhao.var-translation
+```
+
+## 把错误在行尾显示出来
+
+```
+usernamehw.errorlens
+```
+
+## 命令行的形式创建文件
+
+```
+dyno-nguyen.vscode-dynofileutils
+```
+
+## JSON转TS类
+
+```
+bluesCurry.json2interface
+```
+
+---
+
+---
+url: /src/utils/vscode/config.md
+---
+# VsCode配置
+
+## eslint 配置
+
+```json
+{
+  // Disable the default formatter, use eslint instead
+  "prettier.enable": false,
+  "editor.formatOnSave": false,
+
+  // Auto fix
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never"
+  },
+
+  // Silent the stylistic rules in you IDE, but still auto fix them
+  "eslint.rules.customizations": [
+    { "rule": "style/*", "severity": "off", "fixable": true },
+    { "rule": "format/*", "severity": "off", "fixable": true },
+    { "rule": "*-indent", "severity": "off", "fixable": true },
+    { "rule": "*-spacing", "severity": "off", "fixable": true },
+    { "rule": "*-spaces", "severity": "off", "fixable": true },
+    { "rule": "*-order", "severity": "off", "fixable": true },
+    { "rule": "*-dangle", "severity": "off", "fixable": true },
+    { "rule": "*-newline", "severity": "off", "fixable": true },
+    { "rule": "*quotes", "severity": "off", "fixable": true },
+    { "rule": "*semi", "severity": "off", "fixable": true }
+  ],
+
+  // Enable eslint for all supported languages
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "html",
+    "markdown",
+    "json",
+    "jsonc",
+    "yaml",
+    "toml",
+    "xml",
+    "gql",
+    "graphql",
+    "astro",
+    "svelte",
+    "css",
+    "less",
+    "scss",
+    "pcss",
+    "postcss"
+  ]
+}
+```
+
+## vim 插件配置
+
+```json
+{
+  "vim.handleKeys": {
+    "<C-c>": false,
+    "<C-a>": false,
+    "<C-x>": false,
+    "<C-f>": false,
+    "<C-h>": false,
+    "<C-s>": false,
+    "<C-z>": false,
+    "<C-y>": false
+  },
+  "vim.normalModeKeyBindings": [
+    {
+      "before": ["H"],
+      "after": ["^"]
+    },
+    {
+      "before": ["L"],
+      "after": ["g", "_"]
+    }
+  ],
+  "vim.operatorPendingModeKeyBindings": [
+    {
+      "before": ["H"],
+      "after": ["^"]
+    },
+    {
+      "before": ["L"],
+      "after": ["g", "_"]
+    }
+  ]
+}
+```
+
+## 窗口颜色配置
+
+```json
+{
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#580B3E",
+    "titleBar.activeBackground": "#7B0F56",
+    "titleBar.activeForeground": "#FFFCFE"
+  }
+}
+```
+
+## 默认GitBash终端
+
+```json
+{
+  "terminal.integrated.defaultProfile.windows": "Git Bash"
+}
+```
+
+---
+
+---
+url: /src/notes/windows/search.md
+---
+# windows搜索框
+
+## 打开用户主目录文件夹
+
+```txt
+%userprofile%
+```
+
+## 打开应用程序数据文件夹
+
+```txt
+%appdata%
+```
+
+---
+
+---
+url: /src/frontend/unocss/part.md
+---
+# 代码块
+
+* `overflow-hidden ws-nowrap text-ellipsis` 单行文字溢出...
+* `line-clamp-2` 多行文字溢出...
+* `break-all` 文字超出换行
+* `whitespace-pre-wrap break-words`  pre标签文字换行
+* `h-[calc(100%-50px)]` calc函数 高度100%减去50px
+* `[&:nth-child(1)]:bg-red`  子标签伪类选择器
+* `![&_div_span~span]:hover:hidden` 选择器组合 后代选择器
+* `bg-[url(@/frontend/unocss/assets/mao.png)]` 设置背景图片
+* `[word-wrap:break-word] [word-break:break-all]` 设置英文和数字换行
+* `grid grid-cols-3 gap-40` 网格布局 一行三个 间距40px
+* `shadow-[0_0_20px_#16F5FF]` 阴影 0 0 20px #16F5FF
+* `bg-[length:100%_100%]` 背景大小
+* `whitespace-pre-line` div换行符保留
+* `whitespace-nowrap` 文字强行一行展示
+
+---
+
+---
+url: /src/engineering/pre-commit.md
+---
+# 代码格式化
+
+## 使用simple-git-hooks
+
+* 安装 [simple-git-hooks](https://www.npmjs.com/package/simple-git-hooks) 和 [lint-staged](https://www.npmjs.com/package/lint-staged)
+
+```sh
+pnpm i simple-git-hooks lint-staged -D
+```
+
+* 在package.json中添加配置
+
+```json
+{
+  "script": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "simple-git-hooks"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx.cmd lint-staged"
+    // "pre-commit": "pnpm exec lint-staged --concurrent false"
+    // All unused hooks will be removed automatically by default
+    // but you can use the `preserveUnused` option like following to prevent this behavior
+
+    // if you'd prefer preserve all unused hooks
+    // "preserveUnused": true,
+
+    // if you'd prefer preserve specific unused hooks
+    // "preserveUnused": ["commit-msg"]
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,vue,md,json}": [
+      "eslint --fix"
+    ]
+  }
+}
+```
+
+* 更新githooks
+
+```sh
+# [Optional] These 2 steps can be skipped for non-husky users
+git config core.hooksPath .git/hooks/
+rm -rf .git/hooks
+
+# Update ./git/hooks
+npx simple-git-hooks
+```
+
+设置完成之后 git commit 之前就会触发lint检查, 看是否有错误
+
+## 使用husky
+
+* 安装 [husky](https://www.npmjs.com/package/husky) 和 [lint-staged](https://www.npmjs.com/package/lint-staged)
+
+```sh
+pnpm i husky lint-staged -D
+```
+
+* 在package.json中添加配置
+
+```json
+{
+  "script": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,vue,md,json}": [
+      "eslint --fix"
+    ]
+  }
+}
+```
+
+* 运行命令
+
+```bash
+npx husky install
+npx husky add .husky/pre-commit "pnpm exec lint-staged"
+```
+
+---
+
+---
+url: /src/framework/electron/part.md
+---
+# 代码片段
+
+## 开机自启动
+
+```js
+if (process.env.NODE_ENV !== 'development') {
+  // 开机自启动
+  app.setLoginItemSettings({
+    openAtLogin: true,
+    path: app.getPath('exe'),
+  })
+}
+```
+
+## 自动打开调试窗口
+
+```js
+mainWindow.webContents.openDevTools()
+```
+
+## 拦截响应body
+
+```js
+try {
+  mainWindow.webContents.debugger.attach('1.3')
+}
+catch (err) {
+  console.log('Debugger attach failed: ', err)
+}
+
+mainWindow.webContents.debugger.on('detach', (event, reason) => {
+  console.log('Debugger detached due to: ', reason)
+})
+
+mainWindow.webContents.debugger.on('message', (event, method, params) => {
+  if (method === 'Network.responseReceived') {
+    console.log(params.response.url)
+    mainWindow.webContents.debugger.sendCommand('Network.getResponseBody', { requestId: params.requestId }).then((response) => {
+      console.log(response)
+    })
+  }
+})
+
+mainWindow.webContents.debugger.sendCommand('Network.enable')
+```
+
+## 设置session隔离
+
+```js
+const mainWindow = new BrowserWindow({
+  width: 1900,
+  height: 1000,
+  webPreferences: {
+    // preload: join(__dirname, '../preload.js'),
+    nodeIntegration: false,
+    // 每次打开设置不同的值, 保证每次窗口打开都是一个新的session 不会共享cookie applicationCache等
+    partition: Date.now().toString(),
+  },
+})
+```
+
+## 加载本地静态资源
+
+```js
+const addPath = url.format({
+  pathname: join(app.getAppPath(), 'renderer', 'index.html'),
+  protocol: 'file:',
+  slashes: true,
+  hash: '/add',
+})
+mainWindow.loadURL(addPath)
+```
+
+---
+
+---
+url: /src/framework/flutter/part.md
+---
+# 代码片段
+
+## 按条件导包
+
+```dart
+// 如果都不满足默认导入default
+import 'package:default.dart'
+   if (dart.library.io) 'package:io.dart'
+   if (dart.library.js) 'package:js.dart'
+   if (dart.library.html) 'package:html.dart';
+```
+
+## 跟换icon
+
+[flutter\_launcher\_icons](https://pub.dev/packages/flutter_launcher_icons)
+
+* 在pubspec.yaml添加配置
+
+```yaml
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_launcher_icons: ^0.10.0
+
+flutter_icons:
+  android: launcher_icon
+  ios: true
+  image_path: assets/logo.png
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: assets/logo.png
+
+  windows:
+    generate: true
+    image_path: assets/logo.png
+    icon_size: 48 # min:48, max:256, default: 48
+
+# 最后在终端运行命令
+# flutter pub run flutter_launcher_icons:main
+```
+
+## Widget平移
+
+```dart
+Transform.translate(
+  offset: Offset(-10, -10),
+  child: Container(
+    width: 100,
+    height: 100,
+    color: Colors.red,
+  ),
+)
+```
+
+## 复制文字
+
+```dart
+ await Clipboard.setData(ClipboardData(text: '文字'));
+```
+
+## 设置屏幕旋转
+
+```dart
+// 控制横屏竖屏
+WidgetsFlutterBinding.ensureInitialized();
+
+SystemChrome.setPreferredOrientations([
+  DeviceOrientation.landscapeLeft,
+  DeviceOrientation.landscapeRight,
+  DeviceOrientation.portraitUp,
+  DeviceOrientation.portraitDown,
+]);
+```
+
+## 保持屏幕常亮
+
+* [wakelock](https://pub.dev/packages/wakelock)
+
+```dart
+
+import 'package:wakelock/wakelock.dart';
+
+// The following line will enable the Android and iOS wakelock.
+Wakelock.enable();
+
+// The next line disables the wakelock again.
+Wakelock.disable();
+```
+
+---
+
+---
+url: /src/framework/flutter/lint.md
+---
+# 代码规范
+
+* 在pubspec.yaml中添加依赖
+
+```yaml
+dev_dependencies:
+  dart_code_metrics: ^4.19.0
+  analyzer: ^4.7.0
+```
+
+* 新建analysis\_options.yaml
+
+```yaml
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude: [ios/**, android/**, test/**, lib/models/**]
+  plugins:
+    - dart_code_metrics
+  errors:
+    empty_constructor_bodies: error
+    missing_required_param: error
+    always_use_package_imports: error
+    avoid_types_as_parameter_names: error
+    close_sinks: error
+    unnecessary_statements: warning
+    non_constant_identifier_names: warning
+
+dart_code_metrics:
+  # anti-patterns:
+  # - long-method
+  # - long-parameter-list
+  metrics:
+    cyclomatic-complexity: 20
+    maximum-nesting-level: 5
+    number-of-parameters: 4
+    source-lines-of-code: 50
+  metrics-exclude:
+    - test/**
+
+  rules-exclude:
+    - lib/models/**
+
+  rules:
+    # common
+    - newline-before-return
+    - no-boolean-literal-compare
+    - no-empty-block
+    - prefer-trailing-comma:
+        break-on: 3
+    - prefer-conditional-expressions
+    - no-equal-then-else
+    - avoid-collection-methods-with-unrelated-types
+    - avoid-dynamic:
+        severity: performance
+    # - avoid-ignoring-return-values
+    # - avoid-non-null-assertion
+    - avoid-top-level-members-in-tests
+    - avoid-unused-parameters
+    - binary-expression-operand-order
+    - double-literal-format
+    - no-object-declaration
+    - prefer-correct-identifier-length:
+        exceptions: [a, b, c]
+        max-identifier-length: 30
+        min-identifier-length: 2
+    - prefer-correct-type-name
+    - prefer-first
+    - prefer-immediate-return
+    - prefer-iterable-of
+    - prefer-last
+    - prefer-match-file-name
+    # - prefer-moving-to-variable:
+    #     allowed-duplicated-chains: 3
+    - tag-name
+
+    # flutter
+    - always-remove-listener
+    - avoid-shrink-wrap-in-lists
+    - avoid-unnecessary-setstate
+    - avoid-use-expanded-as-spacer
+    - avoid-wrapping-in-padding
+
+linter:
+  rules:
+    # This list is derived from the list of all available lints located at
+    # https://github.com/dart-lang/linter/blob/master/example/all.yaml
+    # # 希望给函数加上返回值类型
+    # - always_declare_return_types
+    # # 将控制结构表达式与其语句分开。(提前返回 一行内) 不被允许 if (condition) return;
+    # - always_put_control_body_on_new_line
+    # - always_put_required_named_parameters_first # we prefer having parameters in the same order as fields https://github.com/flutter/flutter/issues/10219
+    - always_require_non_null_named_parameters
+    # 强制必须指定类型
+    # - always_specify_types
+    # - always_use_package_imports # we do this commonly
+    - annotate_overrides
+    # - avoid_annotating_with_dynamic # conflicts with always_specify_types
+    - avoid_bool_literals_in_conditional_expressions
+    # - avoid_catches_without_on_clauses # blocked on https://github.com/dart-lang/linter/issues/3023
+    # - avoid_catching_errors # blocked on https://github.com/dart-lang/linter/issues/3023
+    # 避免定义只包含静态成员的类。
+    # - avoid_classes_with_only_static_members
+    - avoid_double_and_int_checks
+    # 避免对“动态”目标进行方法调用或属性访问。
+    # - avoid_dynamic_calls
+    - avoid_empty_else
+    - avoid_equals_and_hash_code_on_mutable_classes
+    - avoid_escaping_inner_quotes
+    - avoid_field_initializers_in_const_classes
+    # - avoid_final_parameters # incompatible with prefer_final_parameters
+    - avoid_function_literals_in_foreach_calls
+    - avoid_implementing_value_types
+    - avoid_init_to_null
+    - avoid_js_rounded_ints
+    # - avoid_multiple_declarations_per_line # seems to be a stylistic choice we don't subscribe to
+    - avoid_null_checks_in_equality_operators
+    # - avoid_positional_boolean_parameters # would have been nice to enable this but by now there's too many places that break it
+    - avoid_print
+    # - avoid_private_typedef_functions # we prefer having typedef (discussion in https://github.com/flutter/flutter/pull/16356)
+    - avoid_redundant_argument_values
+    - avoid_relative_lib_imports
+    - avoid_renaming_method_parameters
+    - avoid_return_types_on_setters
+    - avoid_returning_null
+    - avoid_returning_null_for_future
+    - avoid_returning_null_for_void
+    # - avoid_returning_this # there are enough valid reasons to return `this` that this lint ends up with too many false positives
+    - avoid_setters_without_getters
+    - avoid_shadowing_type_parameters
+    - avoid_single_cascade_in_expression_statements
+    - avoid_slow_async_io
+    - avoid_type_to_string
+    - avoid_types_as_parameter_names
+    # - avoid_types_on_closure_parameters # conflicts with always_specify_types
+    - avoid_unnecessary_containers
+    - avoid_unused_constructor_parameters
+    - avoid_void_async
+    # - avoid_web_libraries_in_flutter # we use web libraries in web-specific code, and our tests prevent us from using them elsewhere
+    - await_only_futures
+    - camel_case_extensions
+    - camel_case_types
+    - cancel_subscriptions
+    # - cascade_invocations # doesn't match the typical style of this repo
+    - cast_nullable_to_non_nullable
+    # - close_sinks # not reliable enough
+    # - comment_references # blocked on https://github.com/dart-lang/linter/issues/1142
+    - conditional_uri_does_not_exist
+    # - constant_identifier_names # needs an opt-out https://github.com/dart-lang/linter/issues/204
+    - control_flow_in_finally
+    - curly_braces_in_flow_control_structures
+    - depend_on_referenced_packages
+    - deprecated_consistency
+    # - diagnostic_describe_all_properties # enabled only at the framework level (packages/flutter/lib)
+    - directives_ordering
+    # - discarded_futures # not yet tested
+    # - do_not_use_environment # there are appropriate times to use the environment, especially in our tests and build logic
+    - empty_catches
+    - empty_constructor_bodies
+    - empty_statements
+    - eol_at_end_of_file
+    - exhaustive_cases
+    - file_names
+    - flutter_style_todos
+    - hash_and_equals
+    - implementation_imports
+    - iterable_contains_unrelated_type
+    # - join_return_with_assignment # not required by flutter style
+    - leading_newlines_in_multiline_strings
+    - library_names
+    - library_prefixes
+    - library_private_types_in_public_api
+    # - lines_longer_than_80_chars # not required by flutter style
+    - list_remove_unrelated_type
+    # - literal_only_boolean_expressions # too many false positives: https://github.com/dart-lang/linter/issues/453
+    - missing_whitespace_between_adjacent_strings
+    - no_adjacent_strings_in_list
+    - no_default_cases
+    - no_duplicate_case_values
+    - no_leading_underscores_for_library_prefixes
+    - no_leading_underscores_for_local_identifiers
+    - no_logic_in_create_state
+    # - no_runtimeType_toString # ok in tests; we enable this only in packages/
+    - non_constant_identifier_names
+    - noop_primitive_operations
+    - null_check_on_nullable_type_parameter
+    - null_closures
+    # - omit_local_variable_types # opposite of always_specify_types
+    # - one_member_abstracts # too many false positives
+    - only_throw_errors # this does get disabled in a few places where we have legacy code that uses strings et al
+    - overridden_fields
+    - package_api_docs
+    - package_names
+    - package_prefixed_library_names
+    # - parameter_assignments # we do this commonly
+    - prefer_adjacent_string_concatenation
+    - prefer_asserts_in_initializer_lists
+    # - prefer_asserts_with_message # not required by flutter style
+    - prefer_collection_literals
+    - prefer_conditional_assignment
+    - prefer_const_constructors
+    - prefer_const_constructors_in_immutables
+    - prefer_const_declarations
+    - prefer_const_literals_to_create_immutables
+    # - prefer_constructors_over_static_methods # far too many false positives
+    - prefer_contains
+    # - prefer_double_quotes # opposite of prefer_single_quotes
+    - prefer_equal_for_default_values
+    # - prefer_expression_function_bodies # conflicts with https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#consider-using--for-short-functions-and-methods
+    - prefer_final_fields
+    - prefer_final_in_for_each
+    - prefer_final_locals
+    # - prefer_final_parameters # we should enable this one day when it can be auto-fixed (https://github.com/dart-lang/linter/issues/3104), see also parameter_assignments
+    - prefer_for_elements_to_map_fromIterable
+    - prefer_foreach
+    - prefer_function_declarations_over_variables
+    - prefer_generic_function_type_aliases
+    - prefer_if_elements_to_conditional_expressions
+    - prefer_if_null_operators
+    - prefer_initializing_formals
+    - prefer_inlined_adds
+    # - prefer_int_literals # conflicts with https://github.com/flutter/flutter/wiki/Style-guide-for-Flutter-repo#use-double-literals-for-double-constants
+    - prefer_interpolation_to_compose_strings
+    - prefer_is_empty
+    - prefer_is_not_empty
+    - prefer_is_not_operator
+    - prefer_iterable_whereType
+    # - prefer_mixin # Has false positives, see https://github.com/dart-lang/linter/issues/3018
+    # - prefer_null_aware_method_calls # "call()" is confusing to people new to the language since it's not documented anywhere
+    - prefer_null_aware_operators
+    - prefer_relative_imports
+    - prefer_single_quotes
+    - prefer_spread_collections
+    - prefer_typing_uninitialized_variables
+    - prefer_void_to_null
+    - provide_deprecation_message
+    # - public_member_api_docs # enabled on a case-by-case basis; see e.g. packages/analysis_options.yaml
+    - recursive_getters
+    # - require_trailing_commas # blocked on https://github.com/dart-lang/sdk/issues/47441
+    - secure_pubspec_urls
+    - sized_box_for_whitespace
+    # - sized_box_shrink_expand # not yet tested
+    - slash_for_doc_comments
+    - sort_child_properties_last
+    - sort_constructors_first
+    # - sort_pub_dependencies # prevents separating pinned transitive dependencies
+    - sort_unnamed_constructors_first
+    - test_types_in_equals
+    - throw_in_finally
+    - tighten_type_of_initializing_formals
+    # - type_annotate_public_apis # subset of always_specify_types
+    - type_init_formals
+    # - unawaited_futures # too many false positives, especially with the way AnimationController works
+    - unnecessary_await_in_return
+    - unnecessary_brace_in_string_interps
+    - unnecessary_const
+    - unnecessary_constructor_name
+    # - unnecessary_final # conflicts with prefer_final_locals
+    - unnecessary_getters_setters
+    # - unnecessary_lambdas # has false positives: https://github.com/dart-lang/linter/issues/498
+    - unnecessary_late
+    - unnecessary_new
+    - unnecessary_null_aware_assignments
+    - unnecessary_null_aware_operator_on_extension_on_nullable
+    - unnecessary_null_checks
+    - unnecessary_null_in_if_null_operators
+    - unnecessary_nullable_for_final_variable_declarations
+    - unnecessary_overrides
+    - unnecessary_parenthesis
+    # - unnecessary_raw_strings # what's "necessary" is a matter of opinion; consistency across strings can help readability more than this lint
+    - unnecessary_statements
+    - unnecessary_string_escapes
+    - unnecessary_string_interpolations
+    - unnecessary_this
+    - unnecessary_to_list_in_spreads
+    - unrelated_type_equality_checks
+    - unsafe_html
+    - use_build_context_synchronously
+    # - use_colored_box # not yet tested
+    # - use_decorated_box # not yet tested
+    # - use_enums # not yet tested
+    - use_full_hex_values_for_flutter_colors
+    - use_function_type_syntax_for_parameters
+    - use_if_null_to_convert_nulls_to_bools
+    - use_is_even_rather_than_modulo
+    - use_key_in_widget_constructors
+    - use_late_for_private_fields_and_variables
+    - use_named_constants
+    - use_raw_strings
+    - use_rethrow_when_possible
+    - use_setters_to_change_properties
+    # - use_string_buffers # has false positives: https://github.com/dart-lang/sdk/issues/34182
+    - use_super_parameters
+    - use_test_throws_matchers
+    # - use_to_and_as_if_applicable # has false positives, so we prefer to catch this by code-review
+    - valid_regexps
+    - void_checks
+```
+
+---
+
+---
+url: /src/frontend/vue.md
+---
+# 代码高亮
+
+## 安装依赖
+
+::: code-group
+
+```bash [pnpm]
+pnpm add @highlightjs/vue-plugin@2.1.0 highlight.js@11.9.0
+```
+
+```bash [yarn]
+yarn add @highlightjs/vue-plugin@2.1.0 highlight.js@11.9.0
+```
+
+```bash [npm]
+npm install @highlightjs/vue-plugin@2.1.0 highlight.js@11.9.0
+```
+
+:::
+
+## 使用
+
+```vue
+<script setup lang="ts">
+import hljsVuePlugin from '@highlightjs/vue-plugin'
+
+// import 'highlight.js/styles/stackoverflow-light.css'
+import 'highlight.js/styles/androidstudio.min.css'
+import 'highlight.js/lib/common'
+
+const code = ref(`SELECT * FROM table_name;`)
+</script>
+
+<template>
+  <hljsVuePlugin.component :code="code" language="sql">
+  </hljsVuePlugin.component>
+</template>
+
+<style lang='scss' scoped></style>
+```
+
+---
+
+---
+url: /src/notes/bti.md
+---
+# 位运算
+
+## 按位与
+
+* 两位运算符 & 的作用是按位与，即把两个数的每一位进行与运算，如果两个数的对应位都为1，则结果为1，否则为0。
+
+## 按位或
+
+* 两位运算符 | 的作用是按位或，即把两个数的每一位进行或运算，如果两个数的对应位都为0，则结果为0，否则为1。
+
+## 按位异或
+
+* 两位运算符 ^ 的作用是按位异或，进行异或运算时，当前位的两个二进制表示不同则为1 ，相同则为0
+
+## 按位取反
+
+* 两位运算符 ~ 的作用是按位取反，即把两个数的每一位进行取反运算，如果两个数的对应位为0，则结果为1，如果两个数的对应位为1，则结果为0。
+
+## 按位左移
+
+* 两位运算符 << 的作用是按位左移，即把两个数的每一位进行左移运算。
+
+## 按位右移
+
+* 两位运算符 >> 的作用是按位右移，即把两个数的每一位进行右移运算。
+
+---
+
+---
+url: /src/utils/vscode/use.md
+---
+# 使用技巧
+
+## 搜索自己已安装的插件
+
+```sh
+@installed namek
+```
+
+## 查看插件启动时间
+
+```sh
+## 在命令面板搜索
+Show Running Extensions
+```
+
+## 检查 VSCode 本身的资源使用
+
+```sh
+## 在命令面板搜索
+Developer: Show Running Extensions
+```
+
+## 显示 VSCode 进程的详细资源占用情况
+
+```sh
+## 在命令面板搜索
+Developer: Open Process Explorer
+```
+
+## 禁用所有插件
+
+```sh
+## 在命令面板搜索
+Disable All Installed Extensions
+```
+
+## 查看 VSCode 日志
+
+```sh
+## 在命令面板搜索
+Developer: Show Logs
+```
+
+---
+
+---
+url: /src/develop/node/global_package.md
+---
+# 全局安装的工具
+
+```txt
+@antfu/ni  包管理别名
+degit  代码模板拉取
+rimraf 或者 npkill  快速删除node_models文件
+nrm  npm源管理
+nvm  node版本管理
+serve  起一个node服务
+esno  node运行esm
+npm-check-updates 检查packages.json中的依赖是否有更新
+
+@djie/cli 个人脚手架工具
+```
+
+::: code-group
+
+```bash [npm]
+npm i -g pnpm @antfu/ni degit rimraf nrm serve esno @djie/cli npm-check-updates
+```
+
+```bash [yarn]
+yarn global add pnpm @antfu/ni degit rimraf nrm serve esno @djie/cli npm-check-updates
+```
+
+```bash [pnpm]
+pnpm i -g pnpm @antfu/ni degit rimraf nrm serve esno @djie/cli npm-check-updates
+```
+
+:::
+
+## 离线安装全局package的方法
+
+1. 在有网络的环境下安装全局package
+2. 去到全局node\_modules目录下，找到对应的package
+3. 进入package目录，确保在package.json所在目录
+4. 执行`npm i --offline`，把依赖安装到当前目录
+5. 把当前目录打包成tar.gz文件
+6. 复制离线环境下，解压tar.gz
+7. 进入解压目录，执行`npm i -g .`，安装到全局目录
+
+## 全局安装的package的目录
+
+全局安装的package会在以下目录下：
+
+* Windows: `%APPDATA%\npm\node_modules`
+* macOS/Linux: `/usr/local/lib/node_modules` 或者 `/usr/lib/node_modules`
+
+---
+
+---
+url: /src/develop/git/other.md
+---
+# 其他
+
+## 删除电脑本地git登录信息
+
+* 打开控制面板
+* 打开凭据管理器
+* 打开windows凭据
+* 删除git凭据
+  ![Alt text](assets/image.png)
+
+---
+
+---
+url: /src/develop/other/frp.md
+---
+# 内网穿透
+
+## frp下载
+
+[下载地址](https://github.com/fatedier/frp/releases)
+
+* 下载后将解压后的文件上传到服务器，并配置好相关配置文件
+
+## 修改服务器端服务配置
+
+* 修改frps.ini 配置文件
+
+```txt
+[common]
+bind_port = 7000 # 绑定服务器端口  如果端口没有开启，请先开启端口
+vhost_http_port = 6125 # 暴露出去的端口  可以给nginx使用代理
+```
+
+## 启动进程运行服务器端服务
+
+```sh
+chmod +x frps
+# 使用pm2 运行
+pm2 start frps -- -c frps.ini
+```
+
+## 修改本地客户端服务配置
+
+```txt
+[common]
+server_addr = 47.101.45.132 # 服务器地址
+server_port = 7000 # 服务器端口
+
+[web]
+type = http # 客户端类型
+local_port = 5173  # 本地端口
+custom_domains = frp.laihaojie.com # 自定义域名
+```
+
+## 启动进程运行本地客户端服
+
+```sh
+frpc -c frpc.ini
+```
+
+---
+
+---
+url: /src/framework/android/emulator.md
+---
+## 命令行启动模拟器
+
+```bash
+# 列出所有模拟器
+emulator -list-avds
+# 启动模拟器
+emulator -avd Nexus_5X_API_28_x86
+```
+
+---
+
+---
+url: /src/develop/git/part.md
+---
+## 删除文件
+
+```txt
+# 删除暂存区和工作区的文件
+git rm filename
+# 只删除暂存区的文件，不会删除工作区的文件
+git rm --cached filename
+```
+
+## 修改文件名称
+
+```txt
+# 修改暂存区和工作区的文件名称
+# git mv a.txt b.txt
+git mv oldName newName
+```
+
+## 清除git缓存
+
+```sh
+# 不删除物理文件，仅将该文件从缓存中删除
+git rm --cached -r "文件路径 or ."
+
+# 不仅将该文件从缓存中删除，还会将物理文件删除（不会回收到垃圾桶）
+git rm --f "文件路径 or ."
+```
+
+## 打包代码成zip压缩包
+
+```sh
+# git archive master --prefix='admin/' --format=zip > master.zip
+git archive branchName --prefix='projectName/' --format=zip > projectName.zip
+```
+
+## 子分支同步到主分支最后一次提交并合并代码
+
+```sh
+# 先切换到子分支
+git checkout 子分支名称
+# 子分支同步到主分支最后一次提交
+git rebase 主分支名称
+
+# 切换到主分支
+git checkout 主分支名称
+# 主分支合并子分支代码
+git merge 子分支名称
+```
+
+## 合并不同仓库的代码 不相关的历史
+
+```sh
+# 关联远程仓库
+git remote add upstream <original-repo-url>
+# 检查是否关联成功
+git remote -v
+# 拉取远程仓库的代码
+git fetch upstream
+
+# 切换到需要合并的分支
+git checkout <branch-name>
+
+# 合并远程仓库的代码
+git merge --allow-unrelated-histories <branch-name>
+```
+
+## 把代码临时保存到暂存区
+
+```sh
+# 临时将工作区文件的修改保存至堆栈中
+git stash save "本次提交说明"
+
+# 查看保存的文件
+git stash list
+
+# 将之前保存至堆栈中的文件取出来
+git stash pop
+```
+
+## 删除当前仓库的所有提交记录
+
+```sh
+# 删除所有提交记录
+git checkout --orphan new_branch
+git add -A
+git commit -am "删除所有提交记录"
+git branch -D main
+git branch -m main
+
+git push -f origin main
+# 如果远端分支是受保护的，需要去除保护. 完成后再添加保护
+```
+
+## 修改已经commit但还没push的描述信息
+
+假如你上次commit描述写错了你可以用这条命令重新修改描述信息
+
+```bash
+git commit --amend --only -m 'xxxxxxx'
+```
+
+## 修改最近commit提交信息(描述信息 + 文件)
+
+### 注意如果当前分支是受保护的，需要先去除保护，修改完成后再添加保护
+
+**1. 如果当前历史记录最后一条是你想修改的可以直接用**
+
+```bash
+git commit --amend
+
+git push --force
+```
+
+**2. 如果想修改历史记录的某一条**
+
+```bash
+# 1.启动交互式 rebase： 运行以下命令，HEAD~n 中的 n 是你想回溯的提交数。如果你要修改的是第 5 条提交，则使用 HEAD~5：
+git rebase -i HEAD~2
+
+# 2.找到你要修改的提交： 这会打开一个编辑器，显示最近 n 次提交。每条提交前都有一个动作，比如 pick。找到你想修改的提交，把它前面的 pick 改为 edit。
+
+# 3.修改提交信息： 保存并关闭编辑器后，Git 会暂停在你指定的提交。接下来你可以使用以下命令来修改该提交的提交信息：
+git commit --amend
+# 这会再次打开编辑器，你可以修改提交信息。修改完成后，保存并关闭。
+
+# 4.继续 rebase： 修改完成后，运行以下命令继续 rebase 操作：
+git rebase --continue
+
+# 5.强制推送到远程仓库： 如果你的代码已经推送到远程仓库，你需要强制推送修改：
+git push --force
+```
+
+---
+
+---
+url: /src/notes/bug/front_end.md
+---
+# 前端
+
+## Error: error:0308010C:digital envelope routines::unsupported
+
+::: code-group
+
+```bash [Linux, macOS, Git bash, etc]
+export NODE_OPTIONS=--openssl-legacy-provider
+```
+
+```bash [Windows cmd]
+set NODE_OPTIONS=--openssl-legacy-provider
+```
+
+```bash [Windows PowerShell]
+$env:NODE_OPTIONS = "--openssl-legacy-provider"
+```
+
+:::
+
+* 在package.json中添加
+
+```json
+{
+  "scripts": {
+    "dev": "set NODE_OPTIONS=--openssl-legacy-provider && vite"
+  }
+}
+```
+
+## has been blocked by CORS policy: The request client is not a secure context and the resource is in more-private address space private
+
+```
+1:两种资源都改成https
+
+2:做代理或改dns 两种资源都改成 内网或者外网ip
+
+3:配置chrome选项为disable chrome://flags/#block-insecure-private-network-requests
+
+或者访问者资源加响应头 Access-Control-Allow-Private-Network
+```
+
+---
+
+---
+url: /src/notes/front_end_develop_part.md
+---
+# 前端开发代码片段
+
+## JS
+
+```js
+// 弹出确认框
+ElMessageBox.confirm('您确定要删除吗?', '提示', { type: 'warning' }).then(async () => {
+  await Api.removeCognition(item.id)
+  loadData()
+  ElMessage.success('删除成功')
+}).catch(() => { })
+
+// 弹出输入框
+ElMessageBox.prompt('请输入', '提示').then(async ({ value }) => {
+  savePlantree(value)
+}).catch(() => { })
+```
+
+---
+
+---
+url: /src/fun/python/environment.md
+---
+# 包管理
+
+## pip
+
+```bash
+# 导出requirements.txt
+pip freeze > requirements.txt
+
+# 安装requirements.txt
+pip install -r requirements.txt
+```
+
+---
+
+---
+url: /src/engineering/package-manager.md
+---
+# 包管理器的限制
+
+## 限制必须使用pnpm
+
+* 新建script preinstall.js
+
+```js
+if (!/pnpm/.test(process.env.npm_execpath || '')) {
+  console.warn(
+    '\u001B[33mThis repository requires using pnpm as the package manager '
+    + ' for scripts to work properly.\u001B[39m\n',
+  )
+  process.exit(1)
+}
+```
+
+* 在package.json中添加
+
+```json
+{
+  "scripts": {
+    "preinstall": "node scripts/preinstall.js"
+  }
+}
+```
+
+## 限制必须使用yarn
+
+* 新建.pnpmfile.cjs
+
+```js
+module.exports = {
+  hooks: {
+    readPackage(pkg, context) {
+      console.warn(
+        '\u001B[33mThis repository requires using yarn as the package manager '
+        + ' for scripts to work properly.\u001B[39m\n',
+      )
+      process.exit(1)
+    }
+  }
+}
+```
+
+* 在package.json中添加
+
+```json
+{
+  "scripts": {
+    "preinstall": "node scripts/preinstall.js"
+  }
+}
+```
+
+---
+
+---
+url: /src/framework/uniapp.md
+---
+# 升级依赖
+
+```bash
+# 使用 @dcloudio/uvm 管理编译包的版本，命令行如下：
+
+# 1.更新到最新正式版
+npx @dcloudio/uvm
+
+# 1.更新到最新alpha版
+npx @dcloudio/uvm alpha
+
+# 1.更新到正式版指定版本
+npx @dcloudio/uvm 3.2.12.20211029
+
+# 1.更新到alpha版指定版本
+npx @dcloudio/uvm 3.2.14.20211112-alpha
+
+```
+
+---
+
+---
+url: /src/notes/mysql.md
+---
+# 原生Sql
+
+## 更新字段
+
+```sql
+UPDATE table_name
+SET column1 = value1, column2 = value2, ...
+WHERE condition;
+
+# 示例
+UPDATE t_table
+SET descriptionAt = now(), description = 'test'
+WHERE id = 1 and description is not null;
+```
+
+---
+
+---
+url: /src/framework/flutter/publish.md
+---
+# 发布package
+
+```bash
+ dart pub publish --server=https://pub.dartlang.org
+```
+
+---
+
+---
+url: /src/notes/command.md
+---
+# 各种命令
+
+## Linux命令
+
+```sh
+# 临时添加环境变量path 文件目录
+export PATH=/bin:/usr/bin:$PATH
+
+# 永久添加环境变量path 文件目录 (全局添加)
+vim /etc/profile
+# 编辑环境变量 添加多个路径用冒号隔开
+export PATH=$PATH:/usr/local/bin:/usr/local/sbin
+# 使环境变量生效
+source /etc/profile
+
+# 永久添加环境变量path 文件目录 (当前用户添加)
+vim ~/.bash_profile
+# 编辑环境变量
+export PATH=/bin:/usr/bin:$PATH
+# 使环境变量生效
+source ~/.bash_profile
+
+# 查看端口是否占用
+netstat -anp |grep 8080
+
+# 查看命令所在位置
+whereis python
+
+# 添加软连接
+ln -s 现在的文件名 软连接名
+ln -s /usr/bin/python3.6 /usr/bin/python
+```
+
+---
+
+---
+url: /src/framework/nestjs/img_code.md
+---
+# 图片验证码
+
+* 安装
+
+```sh
+pnpm i svg-captcha svg-to-dataurl
+```
+
+```js
+import svgCaptcha from 'svg-captcha'
+import svgToDataURL from 'svg-to-dataurl'
+
+const captcha = svgCaptcha.create({
+  inverse: false, // 翻转颜色
+  fontSize: 38, // 字体大小
+  noise: 2, // 噪声线条数
+  width: 150, // 宽度
+  height: 40, // 高度
+  size: 6, // 验证码长度
+  charPreset: '0123456789',
+  // background: 'white',
+  ignoreChars: '0o1i', // 验证码字符中排除 0o1i
+})
+// 生成的随机验证码
+const code = captcha.text
+// 生成的svg标签
+const svg = captcha.data
+// svg转base64 生成的图片
+const img = svgToDataURL(captcha.data)
+```
+
+---
+
+---
+url: /src/develop/node.md
+---
+# 在linux上安装node
+
+## 安装node
+
+* 第一步
+
+```shell
+curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
+```
+
+* 第二步
+
+```bash
+sudo yum install -y nodejs
+```
+
+* 1. 第三步检查是否安装成功
+
+```bash
+node -v
+```
+
+## nvm管理node版本
+
+```shell
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+```
+
+[nvm](https://github.com/nvm-sh/nvm/blob/master/README.md#installing-and-updating)
+
+## 下载压缩包安装
+
+[官网地址](https://nodejs.org/en)
+
+* 解压缩 并且重命名为node
+
+```shell
+tar -xvf node-v20.0.0-linux-x64.tar.xz
+mv node-v20.0.0-linux-x64 node20
+```
+
+* 配置环境变量
+
+```shell
+sudo vim /etc/profile
+```
+
+* 添加
+
+```shell
+export PATH=/home/xxx/node20/bin:$PATH
+```
+
+* 使配置生效
+
+```shell
+source /etc/profile
+```
+
+* 检查是否安装成功
+
+```shell
+node -v
+npm -v
+```
+
+---
+
+---
+url: /src/framework/mongodb/nestjs.md
+---
+# 在nestjs中使用mongodb
+
+## 安装
+
+```sh
+pnpm i @nestjs/mongoose mongoose
+```
+
+## 注册使用
+
+* 在app.module.ts中引入mongodb
+
+```ts
+import { MongooseModule } from '@nestjs/mongoose'
+
+@Module({
+  imports: [
+    MongooseModule.forRoot('mongodb://localhost:27017/nest'),
+  ],
+})
+export class AppModule {}
+```
+
+## 创建Schema
+
+* 使用装饰器创建
+
+```ts
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Document } from 'mongoose'
+
+export type CatDocument = Cat & Document
+
+@Schema()
+export class Cat extends Document {
+  @Prop()
+  name: string
+
+  @Prop()
+  age: number
+
+  @Prop()
+  breed: string
+}
+
+export const CatSchema = SchemaFactory.createForClass(Cat)
+```
+
+* 使用原生创建
+
+```js
+import * as mongoose from 'mongoose'
+
+export const CatSchema = new mongoose.Schema({
+  name: String,
+  age: Number,
+  breed: {
+    type: String,
+    required: true,
+  },
+})
+```
+
+## 模型注入
+
+* 在cat.module.ts中注入模型
+
+```ts
+import { Module } from '@nestjs/common'
+import { MongooseModule } from '@nestjs/mongoose'
+import { CatsController } from './cats.controller'
+import { CatsService } from './cats.service'
+import { Cat, CatSchema } from './schemas/cat.schema'
+
+@Module({
+  imports: [MongooseModule.forFeature([{ name: Cat.name, schema: CatSchema }])],
+  controllers: [CatsController],
+  providers: [CatsService],
+})
+export class CatsModule {}
+```
+
+* 在cat.service.ts中引入模型
+
+```ts
+import type { Model } from 'mongoose'
+import type { CreateCatDto } from './dto/create-cat.dto'
+import type { Cat, CatDocument } from './schemas/cat.schema'
+import { Injectable } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
+
+@Injectable()
+export class CatsService {
+  constructor(@InjectModel('Cat') private catModel: Model<CatDocument>) {}
+
+  async create(createCatDto: CreateCatDto): Promise<Cat> {
+    // eslint-disable-next-line new-cap
+    const createdCat = new this.catModel(createCatDto)
+    return createdCat.save()
+  }
+
+  async findAll(): Promise<Cat[]> {
+    return this.catModel.find().exec()
+  }
+}
+```
+
+---
+
+---
+url: /src/develop/node/package_recommend.md
+---
+# 好用的Node包
+
+## 检查package.json 中 dependencies版本更新
+
+* [*npm-check*](https://www.npmjs.com/package/npm-check)
+
+::: code-group
+
+```bash [npm]
+npm install -g npm-check
+```
+
+```bash [yarn]
+yarn global add npm-check
+```
+
+```bash [pnpm]
+pnpm add -g npm-check
+```
+
+:::
+
+使用
+
+```bash
+npm-check -u
+```
+
+## 删除文件夹
+
+* [*rimraf*](https://www.npmjs.com/package/rimraf)
+
+::: code-group
+
+```bash [npm]
+npm install -g rimraf
+```
+
+```bash [yarn]
+yarn global add rimraf
+```
+
+```bash [pnpm]
+pnpm add -g rimraf
+```
+
+:::
+
+使用
+
+```bash
+
+rimraf node_modules
+```
+
+## 监控文件变化
+
+* [*nodemon*](https://www.npmjs.com/package/nodemon)
+
+::: code-group
+
+```bash [npm]
+npm install -g nodemon
+```
+
+```bash [yarn]
+yarn global add nodemon
+```
+
+```bash [pnpm]
+pnpm add -g nodemon
+```
+
+:::
+
+单个文件运行
+
+```json
+{
+  "scripts": {
+    "dev": "nodemon index.js"
+    // .....
+  }
+}
+```
+
+使用配置文件运行 nodemon.json
+
+```json
+{
+  "watch": [
+    "app/**/*.ts",
+    "./index.ts",
+    "utils/**/*.ts"
+  ],
+  "ignore": ["node_modules"],
+  "exec": "ts-node index.ts",
+  "ext": "ts"
+}
+```
+
+---
+
+---
+url: /src/develop/node/child_process.md
+---
+# 子进程
+
+## 开启一个子进程
+
+```js
+// 开启一个子进程 (文件路径)
+const child = fork('src/child.js')
+// 给子进程传递消息
+child.send(user_list)
+// 接受子进程传递过来的消息
+child.on('message', (data) => {
+  console.log(data)
+})
+```
+
+* child.js
+
+```js
+// 接受主进程传递过来的消息
+process.on('message', (data) => {
+  console.log(data)
+  // 给主进程发消息
+  process.send({ message: '这是给主进程传递过去的消息' })
+})
+```
+
+---
+
+---
+url: /src/develop/docker.md
+---
+# 安装
+
+* [Docker官网](https://www.docker.com)
+
+---
+
+---
+url: /src/develop/docker/command.md
+---
+# 常用命令
+
+## 启动命令
+
+```bash
+# 启动docker
+systemctl start docker
+# 停止docker
+systemctl stop docker
+# 重启docker
+systemctl restart docker
+# 查看docker状态
+systemctl status docker
+# 开机启动docker
+systemctl enable docker
+# 查看docker概要信息
+docker info
+# 查看docker总体帮助文档
+docker --help
+# 查看docker命令帮助文档
+docker 具体命令 --help
+```
+
+## 镜像命令
+
+```bash
+# 列出所有镜像
+docker images
+# 搜索镜像
+docker search 镜像名称 --limit 5
+# 拉取镜像到本地
+docker pull 镜像名称:[版本号]
+# 查看镜像 容器 数据卷 所占用的空间
+docker system df
+# 删除镜像 -f [强制删除] 删除多个
+docker rmi 镜像名字或者id  镜像名字或者id  镜像名字或者id
+
+```
+
+## 容器命名
+
+```bash
+# 运行容器
+docker run [选项] 镜像名字或者id [命令] [参数]
+docker run -d 镜像名字或者id # 后台运行 守护进程
+docker run -it --privileged=true -v /home:/home 镜像名字或者id # 交互式运行 -it  --privileged=true 为容器开启root权限 -v /home:/home 将宿主机的/home目录挂载到容器的/home目录
+选项：
+-d 后台运行
+-i 交互式运行
+-t 终端运行
+# -v 挂载数据卷 可以挂载多个 -v /home1:/home1 -v /home:/home
+# -v /home:/home:ro 容器只读
+-v 数据卷名字:容器内路径
+-e 环境变量
+--volumes-from 挂载其他容器的数据卷
+--name 容器名称
+--restart=always 自动重启
+--privileged=true 以特权模式运行
+--net=host 使用主机网络
+--net=none 不使用网络
+--net=container:容器名或id 使用其他容器的网络
+--net=bridge 桥接网络
+--net=macvlan macvlan网络
+--net=none 不使用网络
+--net=overlay overlay网络
+# 列出正在运行的容器 -a 列出所有容器
+docker ps
+# 退出
+exit # 关闭容器
+ctrl + p + q # 退出容器 不关闭
+# 启动已经停止容器
+docker start 容器id或者名字
+# 重启容器
+docker restart 容器id或者名字
+# 停止容器
+docker stop 容器id或者名字
+# 删除容器 -f [强制删除] 删除多个
+docker rm 容器id或者名字 容器id或者名字 容器id或者名字
+# 查看容器日志
+docker logs 容器id或者名字
+# 查看容器进程
+docker top 容器id或者名字
+# 查看容器细节
+docker inspect 容器id或者名字
+# 进入容器
+docker exec -it 容器id或者名字 /bin/bash
+docker attach 容器id或者名字 # 退出容器会关闭容器 基本上不用
+# 容器拷贝文件到本地
+docker cp 容器id或者名字:容器内文件路径 本地文件路径
+# 本地拷贝文件到容器
+docker cp 本地文件路径 容器id或者名字:容器内文件路径
+# 查看容器端口映射
+docker port 容器id或者名字
+# 导出容器
+docker export 容器id或者名字 > 容器.tar
+# 导入容器
+docker import 容器.tar 自定义组织名/镜像名:版本号
+```
+
+## commit 命令
+
+```bash
+# 提交容器 生成本地镜像
+docker commit -m="描述信息" -a="作者" 容器id或者名字 自定义组织名/自定义镜像名:版本号
+#
+```
+
+---
+
+---
+url: /src/develop/git.md
+---
+# 常用命令
+
+## 初始化项目，关联远程仓库
+
+```txt
+# 初始化一个Git仓库
+git init -b main
+# 关联远程仓库
+git remote add <name> <git-repo-url>
+# 例如
+git remote add origin https://github.com/xxxxxx
+# 查看当前远端仓库
+git remote -v
+# 切换远程仓库url
+git remote set-url origin URL
+```
+
+## clone 远程仓库
+
+```txt
+# 新建好远程仓库，然后 clone 到本地
+git clone <git-repo-url>
+
+# 将远程仓库下载到（当前 git bash 启动位置下面的）指定文件中，如果没有会自动生成
+git clone <git-repo-url> <project-name>
+```
+
+## 命令
+
+```bash
+# 查看工作区和暂存区的状态
+git status
+# 将工作区的文件提交到暂存区
+git add .
+# 提交到本地仓库
+git commit -m "本次提交说明"
+# add和commit的合并，便捷写法（未追踪的文件无法直接提交到暂存区/本地仓库）
+git commit -am "本次提交说明"
+# 将本地分支和远程分支进行关联
+git push -u origin branchName
+# 将本地仓库的文件推送到远程分支
+git push
+# 拉取远程分支的代码
+git pull origin branchName
+# 合并分支
+git merge branchName
+# 查看本地拥有哪些分支
+git branch
+# 查看所有分支（包括远程分支和本地分支）
+git branch -a
+# 切换分支
+git checkout branchName
+# 临时将工作区文件的修改保存至堆栈中
+git stash
+# 将之前保存至堆栈中的文件取出来
+git stash pop
+```
+
+## branch
+
+```bash
+# 查看本地分支
+git branch | git branch -l
+# 查看远程分支
+git branch -r
+# 查看所有分支（本地分支+远程分支）
+git branch -a
+# 查看所有分支并带上最新的提交信息
+git branch -av
+# 查看本地分支对应的远程分支
+git branch -vv
+#查看已经合并的分支
+git branch --merged
+# 查看没有合并的分支
+git branch --no-merged
+
+# 新建分支
+# 在别的分支下新建一个分支，新分支会复制当前分支的内容
+# 注意：如果当前分支有修改，但是没有提交到仓库，此时修改的内容是不会被复制到新分支的
+git branch branchname
+# 切换分支(切换分支时，本地工作区，仓库都会相应切换到对应分支的内容)
+git checkout branchname
+# 创建一个 aaa 分支，并切换到该分支 （新建分支和切换分支的简写）
+git checkout -b aaa
+# 可以看做是基于 master 分支创建一个 aaa 分支，并切换到该分支
+git checkout -b aaa master
+
+# 新建一条空分支（详情请看问题列表）
+git checkout --orphan emptyBranchName
+git rm -rf .
+
+# 删除本地分支,会阻止删除包含未合并更改的分支
+git brnach -d branchname
+# 强制删除一个本地分支，即使包含未合并更改的分支
+git branch -D branchname
+# 删除远程分支
+# 推送一个空分支到远程分支，其实就相当于删除远程分支
+git push origin  :远程分支名
+# 或者
+git push origin --delete 远程分支名
+
+# 修改当前分支名
+git branch -m branchname
+
+```
+
+## 版本切换 & 重设 & 撤销
+
+### checkout相关
+
+```bash
+# 恢复暂存区的指定文件到工作区
+git checkout <filename>
+# 恢复暂存区的所有文件到工作区
+git checkout .
+
+# 回滚到最近的一次提交
+# 如果修改某些文件后，没有提交到暂存区，此时的回滚是回滚到上一次提交
+# 如果是已经将修改的文件提交到仓库了，这时再用这个命令回滚无效
+# 因为回滚到的是之前自己修改后提交的版本
+git checkout HEAD
+git checkout HEAD -- filename
+# 回滚到最近一次提交的上一个版本
+git checkout HEAD^
+# 回滚到最近一次提交的上2个版本
+git checkout HEAD^^
+
+# 切换分支，在这里也可以看做是回到项目「当前」状态的方式
+git checkout <当前你正在使用的分支>
+# 切换到某个指定的 commit 版本
+git checkout <commit_id>
+# 切换指定 tag
+git checkout <tag>
+```
+
+### reset相关
+
+```txt
+# 从暂存区撤销特定文件，但不改变工作区。它会取消这个文件的暂存，而不覆盖任何更改
+git reset <fileName>
+# 重置暂存区最近的一次提交，但工作区的文件不变
+git reset
+# 等价于
+git reset HEAD （默认）
+# 重置暂存区与工作区，回退到最近一次提交的版本内容
+git reset --hard
+# 重置暂存区与工作区，回退到最近一次提交的上一个版本
+git reset --hard HEAD^
+
+# 将当前分支的指针指向为指定 commit（该提交之后的提交都会被移除），同时重置暂存区，但工作区不变
+git reset <commit>
+# 等价于
+git reset --mixed  <commit>
+
+# 将当前分支的指针指向为指定 commit（该提交之后的提交都会被移除），但保持暂存区和工作区不变
+git reset --soft  <commit>
+# 将当前分支的指针指向为指定 commit（该提交之后的提交都会被移除），同时重置暂存区、工作区
+git reset --hard  <commit>
+```
+
+### revert相关
+
+```txt
+# 生成一个撤销最近的一次提交的新提交
+git revert HEAD
+# 生成一个撤销最近一次提交的上一次提交的新提交
+git revert HEAD^
+# 生成一个撤销最近一次提交的上两次提交的新提交
+git revert HEAD^^
+# 生成一个撤销最近一次提交的上n次提交的新提交
+git revert HEAD~num
+
+# 生成一个撤销指定提交版本的新提交
+git revert <commit_id>
+# 生成一个撤销指定提交版本的新提交，执行时不打开默认编辑器，直接使用 Git 自动生成的提交信息
+git revert <commit_id> --no-edit
+```
+
+---
+
+---
+url: /src/notes/windows/command.md
+---
+# 常用命令
+
+```sh
+# windows删除DNS缓存 (注意要在cmd里面执行)
+ipconfig /flushdns
+# 给其他内网ip发送消息弹窗
+MSG /server:192.168.137.1 * "自定义消息"
+# 查看电脑连接过得WIFI
+netsh wlan show profile
+# 获取链接过的WIFI密码
+netsh wlan show profile name="WIFI名称" key=clear
+# 查看当前电脑外网地址真实归属地（无法获取开启代理后的地址）
+curl -L ip.tool.lu
+# 检查磁盘是否有问题
+chkdsk /f
+# 检查系统文件是否有问题
+sfc /scannow
+# 定时关机 （3600秒后关机）
+shutdown -s -t 3600
+# 取消关机
+shutdown -a
+```
+
+---
+
+---
+url: /src/notes/windows.md
+---
+# 常见
+
+## host文件位置
+
+```bash
+C:\Windows\System32\drivers\etc\hosts
+```
+
+## PowerShell profile 文件位置
+
+```bash
+C:\Windows\System32\WindowsPowerShell\v1.0\Microsoft.PowerShell_profile.ps1
+```
+
+## PowerShell 无法运行脚本
+
+```bash
+# 以管理员身份运行
+Set-ExecutionPolicy RemoteSigned
+```
+
+## 杀死端口
+
+```bash
+# 查看端口占用
+netstat -ano | findstr 8080
+
+# 杀死进程
+taskkill -PID 1234 -F
+```
+
+---
+
+---
+url: /src/notes/keybord.md
+---
+# 快捷键
+
+## Vscode快捷键
+
+* 格式化 `Shift + Alt + f`
+* 整理import语句 `Ctrl + Shift + o`
+* 显示建议 `Ctrl + i`
+* json转TS类型 `Ctrl + Alt + v`
+* 聚焦到终端 `Alt + i`
+* 聚焦到编辑区 `Ctrl + 1`
+* 聚焦到文件区 `Ctrl + 0`
+* 代码折叠成一行 `Shift + Space + j`
+
+## ChromeDevTools
+
+* 搜索文件 `Ctrl + p`
+* 搜索命令 `Ctrl + Shift + p`
+
+## Vim
+
+* 包裹字符  `先选中 在键入大写的S 然后键入想包裹的字符`
+* 替换包裹符号 `c + s + 需要替换的字符 + 需要替换成的字符`
+
+---
+
+---
+url: /src/framework/uniapp/use.md
+---
+# 快速使用
+
+## 创建项目
+
+* 创建以 javascript 开发的工程（如命令行创建失败，请直接访问 [gitee](https://gitee.com/dcloud/uni-preset-vue/repository/archive/vite.zip)  下载模板）
+
+```sh
+npx degit dcloudio/uni-preset-vue#vite my-vue3-project
+```
+
+* 创建以 typescript 开发的工程（如命令行创建失败，请直接访问 [gitee](https://gitee.com/dcloud/uni-preset-vue/repository/archive/vite.zip)  下载模板）
+
+```sh
+npx degit dcloudio/uni-preset-vue#vite-ts my-vue3-project
+```
+
+---
+
+---
+url: /src/notes/github/part.md
+---
+# 手册
+
+## Github CDN静态资源加速
+
+```text
+https://cdn.jsdelivr.net/gh/<username>/<repo>/file
+比如
+https://cdn.jsdelivr.net/gh/laihaojie/jie-docs@main/package.json
+```
+
+---
+
+---
+url: /src/framework/flutter.md
+---
+# 打包
+
+## 命令
+
+```bash
+# 创建项目
+flutter create --org com.xxxx  -i swift -a java project_name
+
+# 打包 apk
+flutter build apk
+
+# 打包 aab
+flutter build appbundle
+
+# 根据不同的 abi 架构配置不同的 apk
+flutter build apk --split-per-abi # 按abi分包
+
+# android 混淆
+# 文档 https://www.jianshu.com/p/4dd5e5977f36
+flutter build apk --obfuscate --split-debug-info=/<project-name>/<directory>
+flutter build apk --obfuscate --split-debug-info=./symbols
+flutter build appbundle --obfuscate --split-debug-info=./symbols
+
+# 清理全局缓存
+dart pub cache clean
+```
+
+---
+
+---
+url: /src/fun/python/exe.md
+---
+# 打包exe
+
+* 安装pyinstaller
+
+```bash
+pip install pyinstaller -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+```
+
+* 打包
+
+```bash
+# 进入虚拟环境
+Pyinstaller -F py_word.py 打包exe
+
+Pyinstaller -F -w py_word.py 不带控制台的打包
+
+Pyinstaller -F -w --add-data "Chrome;Chrome" main.py 打包带静态文件夹的exe
+
+Pyinstaller -F -w -i chengzi.ico py_word.py 打包指定exe图标打包
+```
+
+* [参考](https://blog.csdn.net/libaineu2004/article/details/112612421)
+
+---
+
+---
+url: /src/framework/uniapp/extenstion_config.md
+---
+# 插件配置
+
+## 用户配置
+
+```json
+{
+  "adb.path": "C:/Users/lu/AppData/Local/Android/Sdk/platform-tools/adb.exe",
+  "defaultFomat.typescript": "prettier",
+  "editor.colorScheme": "Monokai",
+  "editor.contentAssistSelectionMode": "数字模式",
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+  "eslint-js.autoFixOnSave": false,
+  "explorer.iconTheme": "hx-file-icons-colorful",
+  "node.path": "",
+  "npm.path": "",
+  "terminal.type": "内置终端",
+  "weApp.devTools.path": "C:/Program Files (x86)/Tencent/微信web开发者工具"
+}
+```
+
+## jsbeautifyrc
+
+```js
+module.exports = {
+  parsers: {
+    '.js': 'js',
+    '.json': 'js',
+    '.njs': 'js',
+    '.sjs': 'js',
+    '.wxs': 'js',
+    '.css': 'css',
+    '.nss': 'css',
+    '.wxss': 'css',
+    '.acss': 'css',
+    '.ttss': 'css',
+    '.qss': 'css',
+    '.html': 'html',
+    '.ux': 'html',
+    '.wxml': 'html',
+    '.nml': 'html',
+    '.vue': 'html',
+    '.nvue': 'html',
+    '.axml': 'html',
+    '.swan': 'html',
+    '.ttml': 'html',
+    '.qml': 'html'
+  },
+  options: {
+    indent_size: '1',
+    indent_char: '\t',
+    indent_with_tabs: true, // 使用tab缩进
+    eol: '\r\n', // 行结束符
+    end_with_newline: false, // 使用换行结束输出
+    indent_level: 0, // 起始代码缩进数
+    preserve_newlines: true, // 保留空行
+    max_preserve_newlines: 2, // 最大连续保留换行符个数。比如设为2，则会将2行以上的空行删除为只保留1行
+    space_in_paren: false, // 括弧添加空格 示例 f( a, b )
+    space_in_empty_paren: false, // 函数的括弧内没有参数时插入空格 示例 f( )
+    jslint_happy: false, // 启用jslint-strict模式
+    space_after_anon_function: false, // 匿名函数的括号前加空格
+    brace_style: 'preserve-inline', // 代码样式，可选值 [collapse|expand|end-expand|none][,preserve-inline] [collapse,preserve-inline
+    unindent_chained_methods: true, // 不缩进链式方法调用
+    break_chained_methods: false, // 在随后的行中断开链式方法调用
+    keep_array_indentation: true, // 保持数组缩进
+    unescape_strings: false, // 使用xNN符号编码解码可显示的字符
+    wrap_line_length: 420,
+    e4x: false, // 支持jsx
+    comma_first: false, // 把逗号放在新行开头，而不是结尾
+    operator_position: 'before-newline',
+    unformatted: ['wbr'],
+    html: {
+      'indent_handlebars': true,
+      'indent_inner_html': true,
+      'indent-scripts': 'normal', // [keep|separate|normal]
+      'extra_liners': [] // 配置标签列表，需要在这些标签前面额外加一空白行
+    }
+  }
+}
+```
+
+## prettier
+
+```js
+// 配置项说明文档：https://thisismanta.github.io/stylus-supremacy/#options
+module.exports = {
+  insertColons: false,
+  insertSemicolons: false,
+  insertBraces: false,
+  insertNewLineAroundImports: true,
+  insertNewLineAroundBlocks: false,
+  insertNewLineAroundProperties: false,
+  insertNewLineAroundOthers: false,
+  preserveNewLinesBetweenPropertyValues: false,
+  insertSpaceBeforeComment: true,
+  insertSpaceAfterComment: true,
+  insertSpaceAfterComma: true,
+  insertSpaceInsideParenthesis: false,
+  insertParenthesisAfterNegation: false,
+  insertParenthesisAroundIfCondition: true,
+  insertNewLineBeforeElse: false,
+  insertLeadingZeroBeforeFraction: true,
+  selectorSeparator: ', ',
+  tabStopChar: '\t',
+  // "newLineChar": "\n",
+  // "quoteChar": "'",
+  sortProperties: false,
+  alwaysUseImport: false,
+  alwaysUseNot: false,
+  alwaysUseAtBlock: false,
+  alwaysUseExtends: false,
+  alwaysUseNoneOverZero: false,
+  alwaysUseZeroWithoutUnit: false,
+  reduceMarginAndPaddingValues: false,
+  ignoreFiles: []
+}
+```
+
+## supremacy
+
+```js
+// 配置项说明文档：https://thisismanta.github.io/stylus-supremacy/#options
+module.exports = {
+  insertColons: false,
+  insertSemicolons: false,
+  insertBraces: false,
+  insertNewLineAroundImports: true,
+  insertNewLineAroundBlocks: false,
+  insertNewLineAroundProperties: false,
+  insertNewLineAroundOthers: false,
+  preserveNewLinesBetweenPropertyValues: false,
+  insertSpaceBeforeComment: true,
+  insertSpaceAfterComment: true,
+  insertSpaceAfterComma: true,
+  insertSpaceInsideParenthesis: false,
+  insertParenthesisAfterNegation: false,
+  insertParenthesisAroundIfCondition: true,
+  insertNewLineBeforeElse: false,
+  insertLeadingZeroBeforeFraction: true,
+  selectorSeparator: ', ',
+  tabStopChar: '\t',
+  // "newLineChar": "\n",
+  // "quoteChar": "'",
+  sortProperties: false,
+  alwaysUseImport: false,
+  alwaysUseNot: false,
+  alwaysUseAtBlock: false,
+  alwaysUseExtends: false,
+  alwaysUseNoneOverZero: false,
+  alwaysUseZeroWithoutUnit: false,
+  reduceMarginAndPaddingValues: false,
+  ignoreFiles: []
+}
+```
+
+---
+
+---
+url: /src/fun/frontend/pingyin.md
+---
+# 根据中文汉字获取拼音首字母
+
+## 预览效果
+
+## 代码实现
+
+<<< @/src/fun/frontend/pingyin.md#snippet
+
+---
+
+---
+url: /src/notes/rege.md
+---
+# 正则
+
+[掘金文章](https://juejin.cn/post/7119242343798013959)
+
+* 匹配中文
+
+```
+[\u4e00-\u9fa5]+
+```
+
+* 匹配ipv4
+
+```
+((2[0-4]\d|25[0-5]|[01]?\d\d?)\.){3}(2[0-4]\d|25[0-5]|[01]?\d\d?)
+((?:(?:25[0-5]|2[0-4]\d|[01]?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d?\d))
+```
+
+---
+
+---
+url: /src/framework/react-native/message-push.md
+---
+# 消息推送
+
+## JPUSH 消息推送
+
+[*引用原文*](https://blog.csdn.net/Bombas/article/details/123654883)
+
+注册[*极光推送*](https://www.jiguang.cn/)账号  创建应用
+
+* 安装 jpush-react-native jcore-react-native
+
+```sh
+npm install jpush-react-native jcore-react-native
+```
+
+* android配置
+
+* 在AndroidManifest.xml中添加
+
+```xml
+<application>
+  <meta-data android:name="JPUSH_CHANNEL" android:value="${JPUSH_CHANNEL}" />
+  <meta-data android:name="JPUSH_APPKEY" android:value="${JPUSH_APPKEY}" />
+</application>
+```
+
+* 在app/build.gradle中添加
+
+```txt
+implementation project(':jpush-react-native')  // 添加 jpush 依赖
+implementation project(':jcore-react-native')  // 添加 jcore 依赖
+```
+
+* 在 settings.gradle 中添加
+
+```txt
+include ':jpush-react-native'
+project(':jpush-react-native').projectDir = new File(rootProject.projectDir, '../node_modules/jpush-react-native/android')
+include ':jcore-react-native'
+project(':jcore-react-native').projectDir = new File(rootProject.projectDir, '../node_modules/jcore-react-native/android')
+```
+
+* 初始化jpush
+
+```typescript
+// 初始化
+JPush.init({ appKey: 'appKey', titchannelle: 'developer-default', production: true })
+// 连接状态
+JPush.addConnectEventListener((result) => {
+  console.log(`connectListener:${JSON.stringify(result)}`)
+})
+
+// 通知回调
+JPush.addNotificationListener((result) => {
+  console.log(`notificationListener:${JSON.stringify(result)}`)
+})
+
+// 本地通知回调
+JPush.addLocalNotificationListener((result) => {
+  console.log(`localNotificationListener:${JSON.stringify(result)}`)
+})
+
+// tag alias事件回调
+JPush.addTagAliasListener((result) => {
+  console.log(`tagAliasListener:${JSON.stringify(result)}`)
+})
+
+// 手机号码事件回调
+JPush.addMobileNumberListener((result) => {
+  console.log(`mobileNumberListener:${JSON.stringify(result)}`)
+})
+
+JPush.getRegistrationID((registerID) => {
+  console.log('registerID : ', registerID)
+})
+```
+
+---
+
+---
+url: /src/framework/react-native/icons.md
+---
+# 添加icon
+
+* 安装react-native-vector-icons
+
+```sh
+yarn add react-native-vector-icons --save
+```
+
+* 在app/build.gradle中添加
+
+```txt
+// 添加图标
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+```
+
+---
+
+---
+url: /src/framework/react-native.md
+---
+# 添加splash
+
+## android 添加 react-native-splash-screen
+
+* 安装
+
+```sh
+npm install react-native-splash-screen --save
+```
+
+* 在MainApplication.java中添加
+
+```java
+// react-native-splash-screen >= 0.3.1
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+
+private final ReactNativeHost mReactNativeHost =
+    new ReactNativeHost(this) {
+      @Override
+      public boolean getUseDeveloperSupport() {
+        return BuildConfig.DEBUG;
+      }
+
+      @Override
+      protected List<ReactPackage> getPackages() {
+        @SuppressWarnings("UnnecessaryLocalVariable")
+        List<ReactPackage> packages = new PackageList(this).getPackages();
+        // 初始化react-native-splash-screen
+        new SplashScreenReactPackage();
+        return packages;
+      }
+
+      @Override
+      protected String getJSMainModuleName() {
+        return "index";
+      }
+    };
+```
+
+* 在MainActivity.java中添加
+
+```java
+import android.os.Bundle;
+// react-native-splash-screen >= 0.3.1
+import org.devio.rn.splashscreen.SplashScreen;
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+  // 初始化 react-native-splash-screen
+  SplashScreen.show(this);
+  super.onCreate(null);
+}
+
+```
+
+* 新建layout文件 launch\_screen.xml
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginBottom="200dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="阿杰 App"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivLogo">
+
+    </TextView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+
+---
+
+---
+url: /src/framework/react-native/webview.md
+---
+# 添加webview
+
+* 安装react-native-webview
+
+```sh
+yarn add react-native-webview --save
+```
+
+* 在MainActivity.java中添加
+
+```java
+// 添加webview依赖
+import android.webkit.WebView;
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+  SplashScreen.show(this);
+  super.onCreate(null);
+  // 初始化webview
+  WebView.setWebContentsDebuggingEnabled(true);
+}
+```
+
+---
+
+---
+url: /src/develop/vim/playground.md
+---
+# 游乐场
+
+```js
+// 重复了大概70遍
+const aa = 11
+const bb = 22
+```
+
+# 二
+
+hello world javascript!
+
+```js
+async function logout() {
+  if (isWeChat())
+    return
+  await Dialog.alert({
+    title: '提示',
+    message: '退出登录',
+    age: 1,
+    showCancelButton: true,
+    name: '张三',
+  })
+
+  // 清除token
+  store.dispatch('app/clearToken')
+  router.push(`/login?url=${encodeURIComponent(window.location.href)}`)
+}
+```
+
+# 三
+
+you're good man
+
+```js
+const aa = 11
+const bb = 22
+
+function testFunction() {
+  const aa = 11
+  const bb = 22
+}
+```
+
+# 四
+
+```js
+const aa = 11
+const bb = 22
+```
+
+# 五
+
+```js
+const a_c = 1
+const b_c = 2
+const c_c = 3
+
+const aa = 11
+const bb = 22
+
+const aa = 11
+const bb = 22
+
+const aa = 11
+const bb = 22
+```
+
+# 六
+
+```js
+function setName(_name, age) {
+  const aa = 11
+  const bb = 22
+}
+```
+
+---
+
+---
+url: /src/framework/nestjs.md
+---
+# 生命周期
+
+1. 收到请求
+2. 全局绑定的中间件
+3. 模块绑定的中间件
+4. 全局守卫
+5. 控制层守卫
+6. 路由守卫
+7. 全局拦截器（控制器之前）
+8. 控制器层拦截器 （控制器之前）
+9. 路由拦截器 （控制器之前）
+10. 全局管道
+11. 控制器管道
+12. 路由管道
+13. 路由参数管道
+14. 控制器（方法处理器）
+15. 服务（如果有）
+16. 路由拦截器（请求之后）
+17. 控制器拦截器 （请求之后）
+18. 全局拦截器 （请求之后）
+19. 异常过滤器 （路由，之后是控制器，之后是全局）
+20. 服务器响应
+
+---
+
+---
+url: /src/notes/sshkey.md
+---
+# 生成ssh key
+
+```sh
+ssh-keygen -t rsa -C "xxxx@xx.com"
+# 按照提示输入回车
+# 输入密码
+```
+
+`id_rsa.pub`是公钥
+`id_rsa` 是私钥
+
+## 在github中添加公钥
+
+* 查看公钥
+
+```sh
+cat ~/.ssh/id_rsa.pub
+```
+
+* 然后添加到github的ssh key中
+
+## 测试公钥是否有用
+
+```sh
+ssh -T git@github.com
+输入密码验证
+```
+
+若返回 Hi XXX! You’ve successfully authenticated, but Gitee.com does not provide shell access. 内容，则证明添加成功。
+
+---
+
+---
+url: /src/other/jie.md
+---
+# 短语
+
+## EMO
+
+* `真正的寂寞是在人群中，当你面对许多熟悉的脸，突然之间失去了语言。那才是真正的寂寞，深重如溺入蓝色的海洋，无法呼吸。`
+
+* `你会不断的遇见一些人，也会不停的和一些人说再见，从陌生到熟悉，从熟悉再回陌生，从臭味相投到分道扬镳，从相见恨晚到不如不见。`
+
+* `孤独是在喧嚣中突然的沉默，四周的声音仿佛都与自己无关，心中却掀起千层波浪，无法平静。`
+
+* `人生如同一场无尽的旅途，有些人陪你走过一段，但最终都得各自前行，留下一片尘土。`
+
+* `那些曾经无话不谈的人，最终成了无话可说的存在；时间让我们走远，记忆却无法重来。`
+
+* `有些感情如同沙漏，时间流逝，彼此的距离也逐渐拉远，直到看不见彼此的影子。`
+
+* `最难过的不是失去，而是看着那些珍视的人在自己面前渐行渐远，却无能为力。`
+
+## FUN
+
+* `您的智慧真是登峰造极，小弟如沐春风，顿觉豁然开朗，心中敬仰之情如涛涛江水，连绵不绝。`
+
+* `阁下真乃当代智者，一言九鼎，小弟茅塞顿开，顿觉脑洞大开，恍若重生。`
+
+* `看阁下所言，小弟只觉天开地阔，如醍醐灌顶，瞬间觉得人生豁然开朗，实在是相见恨晚。`
+
+* `阁下之才，如日月之辉，灿烂无比，小弟真是仰慕至极，心中敬仰之情无以言表。`
+
+* `阁下所言如天籁之音，小弟听后心中激荡不已，仿佛得到了仙人指点，直叹自己为何未早日遇见。`
+
+* `又学到了，楼主太牛逼了对楼主的感情又如黄河泛滥，一发而不可收拾，听阁下一言，胜读十年寒窗，看古近风流人物，还数阁下！能在此间见到您，真是小弟一生之荣幸，回家定要烧香祭祖，感谢先辈积下阴德`
+
+* `阁下才思泉涌，言谈之间尽显智者风范，小弟如置身于云端，仰望天际星辰，顿觉凡尘琐事皆为过眼云烟，能聆听阁下高见，真乃三生有幸，不禁感慨自己学识浅薄，望阁下不吝赐教，小弟定会铭记于心，毕生受益。`
+
+* `您的睿智令人叹为观止，小弟仿佛打开了一扇通往智慧殿堂的大门，顿时豁然开朗，倍感自己之前犹如井底之蛙，困于狭隘之见，今日得闻您的金玉良言，如获至宝，心中对您的崇敬之情已如滔滔江水，不可抑止。`
+
+* `听君一席话，胜读十年书，阁下的言辞真是如琢玉般精美，每一句都蕴含着深刻的道理，小弟听后如饮甘霖，心中那份仰慕之情已化作滔滔江水，一发而不可收拾，恨不得日日追随左右，聆听教诲。`
+
+* `阁下之言，如九天垂露，甘霖普降，小弟如干涸的土地遇到久旱后的甘雨，顿时生机勃勃，感念之情无以言表，只觉自己之前所知实在浅薄，若能日日聆听您的教诲，必能百尺竿头，更进一步。`
+
+* `您的学识与见解简直是登峰造极，小弟每听一句，心中便似明灯指路，眼前豁然开朗，不禁暗自感叹，能得此指点，实乃三生有幸，阁下真乃吾辈之楷模，心中敬仰之情已如黄河之水，奔流不息。`
+
+---
+
+---
+url: /src/notes/my_port.md
+---
+# 端口占用
+
+* `6120` 后台管理
+* `6121` 文档
+* `6125` 服务端frp内网穿透
+* `8120` websocket服务
+* `8120` 后台接口服务
+
+---
+
+---
+url: /src/framework/android.md
+---
+# 签名文件
+
+## 生成包签名
+
+```sh
+keytool -genkey -alias com.jieapp -keyalg RSA -validity 200000 -keystore ./jieapp.keystore
+```
+
+## 查看包签名
+
+```sh
+keytool -V -list -keystore ./jieapp.keystore
+```
+
+## 获取秘钥散列
+
+```sh
+keytool -exportcert -alias com.jieapp -keystore ./jieapp.keystore | openssl sha1 -binary | openssl base64
+```
+
+---
+
+---
+url: /src/engineering/terminal.md
+---
+# 终端操作
+
+## 命令行指令
+
+[commander](https://github.com/tj/commander.js)
+
+## 终端输入操作
+
+* [*prompts*](https://www.npmjs.com/package/prompts)
+
+```sh
+pnpm add prompts -D
+```
+
+* [*inquirer*](https://www.npmjs.com/package/inquirer)
+
+```sh
+pnpm add inquirer -D
+```
+
+## 打印颜色文字
+
+* [*chalk*](https://www.npmjs.com/package/chalk)
+
+```sh
+pnpm add chalk -D
+```
+
+* [*kolorist*](https://www.npmjs.com/package/kolorist)
+
+```sh
+pnpm add kolorist -D
+```
+
+* [*kleur*](https://www.npmjs.com/package/kleur)
+
+```sh
+pnpm add kleur -D
+```
+
+* [*picocolors*](https://www.npmjs.com/package/picocolors)
+
+```sh
+pnpm add picocolors -D
+```
+
+---
+
+---
+url: /src/framework/react-native/package.md
+---
+# 自定义package
+
+* 添加testManager.java
+
+```java
+package com.jieapp;
+
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContextBaseJavaModule;
+import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeMap;
+import com.facebook.react.uimanager.IllegalViewOperationException;
+
+public class TestManager extends ReactContextBaseJavaModule {
+
+    public TestManager(ReactApplicationContext reactContext) {
+
+        super(reactContext);
+
+    }
+
+    //    重写getName方法声明Module类名称,在RN调用时用到
+    @Override
+    public String getName() {
+        return "TestManager";
+    }
+
+    /**
+     * 获取app版本号
+     * @param successCallback
+     */
+    @ReactMethod
+    public void getAppVersion(Callback successCallback) {
+        try {
+            PackageInfo info = getPackageInfo();
+            if (info != null) {
+                successCallback.invoke(info.versionName);
+            } else {
+                successCallback.invoke("");
+            }
+        } catch (IllegalViewOperationException e) {
+
+        }
+    }
+
+    private PackageInfo getPackageInfo() {
+        PackageManager manager = getReactApplicationContext().getPackageManager();
+        PackageInfo info = null;
+        try {
+            info = manager.getPackageInfo(getReactApplicationContext().getPackageName(), 0);
+            return info;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            return info;
+        }
+    }
+
+    @ReactMethod
+    public void getStrings(Callback successCallback) {
+        successCallback.invoke("我是android 返回的字符串");
+    }
+
+    /**
+     * Promise方式
+     * @param name
+     * @param promise
+     */
+    @ReactMethod
+    public void promiseMethod(String name, Promise promise) {
+        WritableMap writableMap = new WritableNativeMap();
+
+        writableMap.putString("age","20");
+        writableMap.putString("time",Tools.TestString());
+
+        WritableMap map = Arguments.createMap();
+        map.putString("name","zhangsan");
+        writableMap.putMap("map", map);
+
+        promise.resolve(writableMap);
+    }
+
+}
+```
+
+* 添加testPackage.java
+
+```java
+
+package com.jieapp;
+
+import com.facebook.react.ReactPackage;
+import com.facebook.react.bridge.NativeModule;
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.uimanager.ViewManager;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class TestPackage implements ReactPackage {
+
+    @Override
+    public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<NativeModule> createNativeModules(
+            ReactApplicationContext reactContext) {
+        List<NativeModule> modules = new ArrayList<>();
+
+        // 添加一个安卓原生的activity模块
+        modules.add(new TestManager(reactContext));
+
+        return modules;
+    }
+
+}
+```
+
+* 在MainApplication.java中注册
+
+```java
+  private final ReactNativeHost mReactNativeHost =
+      new ReactNativeHost(this) {
+        @Override
+        public boolean getUseDeveloperSupport() {
+          return BuildConfig.DEBUG;
+        }
+
+        @Override
+        protected List<ReactPackage> getPackages() {
+          @SuppressWarnings("UnnecessaryLocalVariable")
+          List<ReactPackage> packages = new PackageList(this).getPackages();
+          // Packages that cannot be autolinked yet can be added manually here, for example:
+          // 添加自定义的package
+          packages.add(new TestPackage());
+          return packages;
+        }
+
+        @Override
+        protected String getJSMainModuleName() {
+          return "index";
+        }
+      };
+
+```
+
+---
+
+---
+url: /src/notes/github/actions.md
+---
+# 部署
+
+## 部署Web到阿里云OSS
+
+```txt
+name: Deploy to Aliyun OSS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+
+      # 安装pnpm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7.3.0
+
+      # 安装依赖
+      - name: Install dependencies
+        run: pnpm install
+
+      # 打包
+      - name: Build
+        run: pnpm build
+
+      # 打包到阿里云oss
+      - uses: manyuanrong/setup-ossutil@v2.0
+        with:
+          endpoint: oss-cn-shanghai.aliyuncs.com
+          access-key-id: ${{ secrets.ACCESSKEYID }}
+          access-key-secret: ${{ secrets.ACCESSKEYSECRET }}
+      - run: ossutil cp -rf ./dist/ oss://admin-laihaojie-top/
+
+      - name: Send success message
+        if: success()
+        # 工作流成功钩子
+        run: xxx
+
+      - name: Send failed message
+        if: failure()
+        # 工作流失败钩子
+        run: xxxx
+```
+
+## 部署Web到亚马逊S3
+
+```txt
+name: Deploy to Amazon S3
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+   runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [16.x]
+        name: [name]
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+
+      - name: Set node version to ${{ matrix.node }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install
+        run: pnpm i
+
+      - name: Build ${{ matrix.name }}
+        run: pnpm build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy static site to S3 bucket
+        run: aws s3 sync ./dist/ s3://${{ secrets.AWS_S3_BUCKET }} --delete
+
+      - name: Send success message
+        if: success()
+        # 工作流成功钩子
+        run: xxx
+
+      - name: Send failed message
+        if: failure()
+        # 工作流失败钩子
+        run: xxxx
+```
+
+## 部署node服务到阿里云ESC
+
+```txt
+name: Deploy
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy
+
+        # 复制代码到服务器
+        uses: cross-the-world/scp-pipeline@master
+        env:
+          WELCOME: "ssh scp ssh pipelines"
+          LASTSSH: "Doing something after copying"
+        with:
+          host: ${{ secrets.TG_HOST }}
+          user: ${{ secrets.TG_USER }}
+          pass: ${{ secrets.TG_PASS }}
+          connect_timeout: 10s
+          local: "./*"
+          remote: /app/nodejs/admin
+
+      # 登录到远程服务器并安装依赖
+      - name: Deploy2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.TG_HOST }}
+          username: ${{ secrets.TG_USER }}
+          password: ${{ secrets.TG_PASS }}
+          script: |
+            cd /app/nodejs/admin
+            pnpm install && pnpm build
+
+  send:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send success message
+        if: success()
+        # 工作流成功钩子
+        run: xxx
+
+      - name: Send failed message
+        if: failure()
+        # 工作流失败钩子
+        run: xxxx
+```
+
+## 部署node服务到亚马逊EC2
+
+```txt
+name: Deploy
+on:
+  push:
+    branches:
+      - main
+
+env:
+  failed_url: https://api-lmapp.lingman.tech/api/Public/ppublishfail
+  success_url: https://api-lmapp.lingman.tech/api/Public/ppublish
+
+jobs:
+  Copy:
+    name: Copy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Copy to my EC2 instance
+        uses: easingthemes/ssh-deploy@v2.1.5
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          SOURCE: ./
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: ${{ secrets.TARGET }}
+
+  Deploy:
+    needs: Copy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy in EC2
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY  }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${REMOTE_USER}@${REMOTE_HOST} '
+
+            #Now we have got the access of EC2 and we will start the deploy .
+            cd ${{ secrets.TARGET }} &&
+            pnpm i &&
+            pnpm build &&
+            pm2 restart api-ball
+          '
+
+      - name: Send success message
+        if: success()
+        # 工作流成功钩子
+        run: xxx
+
+      - name: Send failed message
+        if: failure()
+        # 工作流失败钩子
+        run: xxxx
+```
+
+---
+
+---
+url: /src/develop/node/deploy.md
+---
+# 部署node服务
+
+## 用pm2部署
+
+[PM2文档](https://pm2.keymetrics.io/docs/usage/quick-start/)
+
+## 安装
+
+```bash
+npm install -g pm2
+```
+
+## 添加配置文件
+
+```json
+{
+  "apps": [
+    {
+      "name": "app_name",
+      "script": "./dist/index.js",
+      "instances": "1",
+      "exec_mode": "cluster",
+      "watch": true,
+      "ignore_watch": [
+        "node_modules",
+        "app"
+      ]
+    }
+  ]
+}
+```
+
+## 命令行运行脚本
+
+```sh
+# pm2 start <脚本名称> -- <脚本需要的参数>
+```
+
+## 配置说明
+
+apps:json 结构，apps是一个数组，每一个数组成员就是对应一个pm2中运行的应用
+
+* `name` 应用程序名称
+
+* `cwd` 应用程序所在的目录
+
+* `script` 应用程序的脚本路径
+
+* `env` 设置环境变量
+
+* `watch` 是否启用监控模式，默认是false。如果设置成true，当应用程序变动时，pm2会自动重载。这里也可以设置你要监控的文件或文件夹，如：
+
+  ```json
+  {
+    "apps": [
+      {
+        "name": "app_name",
+        "script": "./dist/index.js",
+        "watch": [
+          "./dist"
+        ]
+      }
+    ]
+  }
+  ```
+
+* `ignore_watch` 忽略监控的文件或文件夹，如：
+
+* `autorestart` 启用/禁用应用程序崩溃或退出时自动重启
+
+* `error_file` 自定义应用程序的错误日志文件
+
+* `out_file` 自定义应用程序日志文件
+
+* `pid_file` 自定义应用程序的pid文件
+
+* `instances` 运行实例个数
+
+* `min_uptime` 最小运行时间
+
+* `cron_restart` 定时启动，解决重启能解决的问题
+
+## 启动
+
+```bash
+pm2 start pm2config.json
+```
+
+## 启动一个进程并把它命名为 app\_name
+
+```bash
+pm2 start app.js --name app_name
+```
+
+## 停止所有进程
+
+```bash
+pm2 stop all
+```
+
+## 停止指定的进程
+
+```bash
+pm2 stop app_name
+```
+
+## 重启所有进程
+
+```bash
+pm2 restart all  or  pm2 reload all
+```
+
+## 杀死全部进程
+
+```bash
+pm2 delete all
+```
+
+## 杀死指定的进程
+
+```bash
+pm2 delete 0
+```
+
+## 查看日志
+
+```bash
+pm2 logs all
+```
+
+---
+
+---
+url: /src/develop/git/config.md
+---
+# 配置
+
+## 配置 Git
+
+```bash
+# 配置全局用户
+git config --global user.name "用户名"
+git config --global user.email "git账号"
+# 配置别名
+git config --global alias.co checkout
+git config --global alias.ss status
+git config --global alias.cm commit
+git config --global alias.br branch
+git config --global alias.rg reflog
+# 这里只是美化 log 的输出，实际使用时可以在 git lg 后面加命令参数，如： git lg -10 显示最近10条提交
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+# 删除全局配置
+git config --global --unset alias.xxx
+git config --global --unset user.xxx
+
+# 查看全局配置
+git config user.name
+git config alias.xxx
+
+```
+
+---
+
+---
+url: /src/develop/vim/keyboard.md
+---
+# 键盘使用
+
+## 常用功能
+
+|功能 |组合键|备注|
+|----|----|----|
+|唤醒|f + j|f 和 j 键⼀起按|
+|休眠|Lshift + Rshift + p|⼿动休眠键盘|
+|切换蓝⽛设备|Lshift + Rshift + q / w / e|q / w / e 表⽰三个不同的蓝⽛频道|
+|重新⼴播当前蓝⽛频道|Lshift + Rshift + r|⽆法连接当前蓝⽛频道的时候可以尝试|
+|清空当前蓝⽛频道绑定的设备|Lshift + Rshift + o|e.g. 如果你当前的蓝⽛频道是 q 频道，按此组合键后，q 频道绑定的设备被清除，可⽤于绑定其他蓝⽛设备|
+|输出电池电量|Lshift + Rshift + h|在任意编辑器上按组合键，可以打印出数字，表⽰当前剩余电量|
+
+## 连接蓝牙
+
+HTKB 可以⽀持绑定三台不同的蓝⽛设备。其快捷键是同时按住 Lshift + Rshift + 蓝⽛频
+道按键。固件中默认的蓝⽛频道按键为 q，w 和 e。使⽤组合键后可以在电脑的在添加蓝
+⽛设备清单中找到HTKB开头的设备
+（注意：不要⼀次把 Lshift + Rshift + q，Lshift + Rshift + w，Lshift + Rshift + e 都按⼀
+遍，因为会傻傻分不清楚。解决⽅法是等⼀会⼉蓝⽛设备清单更新后再次按 Lshift +
+Rshift + r 重新⼴播当前蓝⽛频道）
+
+## 解除蓝牙
+
+解除蓝牙设备的思路也是相似：如果我想解除 fn + w 的设备，那么我首先需要切换到fn + w 频道，然后按 fn + esc 解除该频道绑定的设备
+
+---
+
+---
+url: /src/fun/frontend/cropper.md
+---
+# 预览效果
+
+## 代码实现
+
+<<< @/src/fun/frontend/components/cropper.vue
+
+---
+
+---
+url: /src/fun/frontend/eye.md
+---
+# 预览效果
+
+## 代码实现
+
+<<< @/.vitepress/components/components/eye.vue
+
+---
+
+---
+url: /src/fun/frontend.md
+---
+# 预览效果
+
+## 代码实现
+
+<<< @/src/fun/frontend/components/clock.vue

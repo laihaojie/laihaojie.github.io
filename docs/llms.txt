@@ -1,0 +1,213 @@
+# 阿杰编程手册
+
+> Vite & Vue powered static site generator.
+
+Lorem ipsum...
+
+## Table of Contents
+
+### VsCode
+
+- [VsCode配置](/src/utils/vscode/config.md)
+- [VsCode插件](/src/utils/vscode.md)
+- [Untitled](/src/utils/vscode/my.md)
+- [使用技巧](/src/utils/vscode/use.md)
+
+### 前端工程化
+
+- [Bumpp](/src/engineering/bumpp.md)
+- [Eslint](/src/engineering.md)
+- [npm安装github仓库包](/src/engineering/npm-github.md)
+- [包管理器的限制](/src/engineering/package-manager.md)
+- [代码格式化](/src/engineering/pre-commit.md)
+- [node脚本](/src/engineering/scripts.md)
+- [终端操作](/src/engineering/terminal.md)
+- [tsup](/src/engineering/tsup.md)
+
+### UnoCss
+
+- [Untitled](/src/frontend/unocss/icon.md)
+- [UnoCss](/src/frontend/unocss.md)
+- [代码块](/src/frontend/unocss/part.md)
+
+### Vue
+
+- [代码高亮](/src/frontend/vue.md)
+
+### Uniapp
+
+- [插件配置](/src/framework/uniapp/extenstion_config.md)
+- [升级依赖](/src/framework/uniapp.md)
+- [uniapp 代码片段](/src/framework/uniapp/uniapp_part.md)
+- [快速使用](/src/framework/uniapp/use.md)
+
+### Flutter
+
+- [打包](/src/framework/flutter.md)
+- [代码规范](/src/framework/flutter/lint.md)
+- [代码片段](/src/framework/flutter/part.md)
+- [发布package](/src/framework/flutter/publish.md)
+
+### Electron
+
+- [Electron](/src/framework/electron.md)
+- [代码片段](/src/framework/electron/part.md)
+
+### React-Native
+
+- [添加icon](/src/framework/react-native/icons.md)
+- [添加splash](/src/framework/react-native.md)
+- [消息推送](/src/framework/react-native/message-push.md)
+- [自定义package](/src/framework/react-native/package.md)
+- [添加webview](/src/framework/react-native/webview.md)
+
+### Android
+
+- [ADB](/src/framework/android/adb.md)
+- [APK分包](/src/framework/android/apk.md)
+- [CPU架构](/src/framework/android/cpu.md)
+- [列出所有模拟器](/src/framework/android/emulator.md)
+- [签名文件](/src/framework/android.md)
+
+### NestJs
+
+- [图片验证码](/src/framework/nestjs/img_code.md)
+- [生命周期](/src/framework/nestjs.md)
+- [sequelize](/src/framework/nestjs/sequelize.md)
+
+### MongoDB
+
+- [mongodb 增删改查](/src/framework/mongodb/crud.md)
+- [MongoDB](/src/framework/mongodb.md)
+- [在nestjs中使用mongodb](/src/framework/mongodb/nestjs.md)
+
+### Node 相关
+
+- [子进程](/src/develop/node/child_process.md)
+- [部署node服务](/src/develop/node/deploy.md)
+- [全局安装的工具](/src/develop/node/global_package.md)
+- [在linux上安装node](/src/develop/node.md)
+- [nodemon](/src/develop/node/nodemon.md)
+- [好用的Node包](/src/develop/node/package_recommend.md)
+- [package相关](/src/develop/node/publish.md)
+- [npm源](/src/develop/node/registry.md)
+
+### Docker
+
+- [常用命令](/src/develop/docker/command.md)
+- [Docker-Desktop](/src/develop/docker/desktop.md)
+- [DockerFile](/src/develop/docker/docker_file.md)
+- [安装](/src/develop/docker.md)
+
+### Git 相关
+
+- [配置](/src/develop/git/config.md)
+- [Git Hooks](/src/develop/git/hooks.md)
+- [常用命令](/src/develop/git.md)
+- [其他](/src/develop/git/other.md)
+- [删除暂存区和工作区的文件](/src/develop/git/part.md)
+- [tag操作](/src/develop/git/tag.md)
+
+### 键盘侠
+
+- [键盘使用](/src/develop/vim/keyboard.md)
+
+### Centos
+
+- [Centos7](/src/develop/centos.md)
+
+### 其他
+
+- [内网穿透](/src/develop/other/frp.md)
+
+### 代码片段
+
+- [CSS](/src/notes/part/css.md)
+- [HTML](/src/notes/part/html.md)
+- [JavaScript](/src/notes/part/javascript.md)
+- [NodeJS](/src/notes/part/node.md)
+- [Untitled](/src/notes/part/vue3.md)
+
+### BUG
+
+- [前端](/src/notes/bug/front_end.md)
+
+### 随手记
+
+- [JavaScript](/src/notes/JavaScript.md)
+- [JS浮点数运算](/src/notes/bignumber.md)
+- [位运算](/src/notes/bti.md)
+- [Chrome插件](/src/notes/chrome_extension.md)
+- [各种命令](/src/notes/command.md)
+- [前端开发代码片段](/src/notes/front_end_develop_part.md)
+- [JSDoc中给函数参数添加类型](/src/notes/js-doc.md)
+- [快捷键](/src/notes/keybord.md)
+- [Markdown语法](/src/notes/markdown.md)
+- [端口占用](/src/notes/my_port.md)
+- [npmrc](/src/notes/npmrc.md)
+- [package.json](/src/notes/package.md)
+- [正则](/src/notes/rege.md)
+- [生成ssh key](/src/notes/sshkey.md)
+- [TypeScript](/src/notes/typescript.md)
+- [vite配置](/src/notes/vite.md)
+
+### Windows
+
+- [常用命令](/src/notes/windows/command.md)
+- [常见](/src/notes/windows.md)
+- [windows搜索框](/src/notes/windows/search.md)
+
+### Github
+
+- [部署](/src/notes/github/actions.md)
+- [手册](/src/notes/github/part.md)
+
+### 前端
+
+- [预览效果](/src/fun/frontend/cropper.md)
+- [Untitled](/src/fun/frontend/css.md)
+- [预览效果](/src/fun/frontend/eye.md)
+- [预览效果](/src/fun/frontend.md)
+- [Untitled](/src/fun/frontend/particle.md)
+- [根据中文汉字获取拼音首字母](/src/fun/frontend/pingyin.md)
+
+### Python
+
+- [包管理](/src/fun/python/environment.md)
+- [打包exe](/src/fun/python/exe.md)
+- [TheFuck](/src/fun/python.md)
+- [Untitled](/src/fun/python/part.md)
+
+### 娜第
+
+- [短语](/src/other/jie.md)
+
+### Python作业
+
+- [2023-02-22](/src/other/python/2.22.md)
+- [2023-03-01](/src/other/python/3.1.md)
+- [2023-03-01](/src/other/python/3.1.md)
+- [2023-03-01](/src/other/python/3.1.md)
+- [2023-03-01](/src/other/python/3.1.md)
+
+### Other
+
+- [2023-02-22](/src/other/python/2.22.md)
+- [2023-03-01](/src/other/python/3.1.md)
+- [2023-03-08](/src/other/python/3.8.md)
+- [2023-03-15](/src/other/python/3.15.md)
+- [2023-03-22](/src/other/python/3.22.md)
+- [A](/src/utils/a.md)
+- [B](/src/utils/b.md)
+- [Chrome](/src/develop/vim/chrome.md)
+- [Develop](/src/develop.md)
+- [Framework](/src/framework.md)
+- [iTerm2](/src/develop/vim/iterm2.md)
+- [jie-docs](/README.md)
+- [Untitled](/login.md)
+- [Untitled](/test.md)
+- [Video](/src/video.md)
+- [Vim](/src/develop/vim.md)
+- [Vscode](/src/develop/vim/vscode.md)
+- [原生Sql](/src/notes/mysql.md)
+- [游乐场](/src/develop/vim/playground.md)
