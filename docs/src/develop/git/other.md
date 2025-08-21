@@ -9,4 +9,4 @@ url: /src/develop/git/other.md
 * 打开凭据管理器
 * 打开windows凭据
 * 删除git凭据
-  ![Alt text](assets/image.png)
+  ![Alt text](/assets/image.CTM-0CbL.png)
