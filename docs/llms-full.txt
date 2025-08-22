@@ -6069,8 +6069,8 @@ url: /src/framework/electron/note.md
 node node_modules/electron/install.js
 ```
 
-这个命令就是下载electron所需要的依赖包
-如果下载失败或者很慢，也可以手动从其他机器上复制好对应版本号的依赖包到指定目录下
+这个命令就是下载electron所需要的依赖包到指定目录
+如果下载失败或者很慢，也可以手动从其他下载好的机器上复制好对应版本号的依赖包到指定目录下
 
 windows下的依赖包目录为：
 
@@ -7211,17 +7211,6 @@ url: /src/fun/frontend/cropper.md
 ---
 
 ---
-url: /src/fun/frontend.md
----
-# 预览效果
-
-## 代码实现
-
-<<< @/src/fun/frontend/components/clock.vue
-
----
-
----
 url: /src/fun/frontend/eye.md
 ---
 # 预览效果
@@ -7229,3 +7218,14 @@ url: /src/fun/frontend/eye.md
 ## 代码实现
 
 <<< @/.vitepress/components/components/eye.vue
+
+---
+
+---
+url: /src/fun/frontend.md
+---
+# 预览效果
+
+## 代码实现
+
+<<< @/src/fun/frontend/components/clock.vue
